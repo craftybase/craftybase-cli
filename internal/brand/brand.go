@@ -11,5 +11,5 @@ const (
 	DefaultAPIURL    = "https://api.craftybase.com"
 	UserAgentProduct = "craftybase-cli"
 	HomebrewTap      = "craftybase/tap/craftybase"
-	InstallScriptURL = "https://cli.craftybase.com/install"
+	InstallScriptURL = "https://cli.craftybase.dev/install"
 )
