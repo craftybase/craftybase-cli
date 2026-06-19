@@ -9,6 +9,7 @@ const (
 	ConfigDir        = ".craftybase"
 	ConfigFile       = "config.toml"
 	DefaultAPIURL    = "https://api.craftybase.com"
+	DocsURL          = "https://craftybase.com/docs/api"
 	UserAgentProduct = "craftybase-cli"
 	HomebrewTap      = "craftybase/tap/craftybase"
 	InstallScriptURL = "https://cli.craftybase.dev/install"
