@@ -2,6 +2,7 @@ package commands
 
 import (
 	"bytes"
+	"os"
 	"strings"
 	"testing"
 
@@ -152,5 +153,24 @@ func TestExecute_SubcommandHelp_UsesDefault(t *testing.T) {
 	}
 	if !strings.Contains(out, "Usage:") {
 		t.Errorf("subcommand help should be default Cobra help, got:\n%s", out)
+	}
+}
+
+func TestRenderRootHelp_PlainGolden(t *testing.T) {
+	got := renderToString(renderOpts{color: false, trueColor: false, width: 100})
+	const path = "../testdata/golden/roothelp_plain.golden"
+
+	if os.Getenv("UPDATE_GOLDEN") == "1" {
+		if err := os.WriteFile(path, []byte(got), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		return
+	}
+	want, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read golden (run with UPDATE_GOLDEN=1 to create): %v", err)
+	}
+	if got != string(want) {
+		t.Errorf("root help plain output changed; re-run with UPDATE_GOLDEN=1 if intentional")
 	}
 }

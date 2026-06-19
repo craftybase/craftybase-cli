@@ -1,0 +1,32 @@
+
+ __   __        ___ ___      __        __   ___
+/  ` |__)  /\  |__   |  \ / |__)  /\  /__` |__
+\__, |  \ /~~\ |     |   |  |__) /~~\ .__/ |___ 
+
+The command-line interface for Craftybase
+
+  $ craftybase help <command>                     Display help for a command
+  $ craftybase account                            Show account information
+  $ craftybase api <METHOD> <path>                Make authenticated API requests
+  $ craftybase auth login | status | logout       Authenticate with Craftybase
+  $ craftybase materials list | show              Manage materials
+  $ craftybase completion <shell>                 Generate shell completion scripts
+  $ craftybase version                            Print version information
+
+Flags:
+      --json          Output raw API envelope (pretty-printed JSON)
+      --ndjson        Output auto-paginated NDJSON stream
+      --token <token>  API token (overrides stored credentials)
+      --api-url <url>  API base URL
+      --no-color      Disable ANSI color output
+      --verbose       Show HTTP request/response detail (token redacted)
+  -h, --help          Show help for a command
+
+Environment Variables:
+  CRAFTYBASE_API_TOKEN     API token used for requests (CI, scripts)
+  CRAFTYBASE_API_URL       API base URL override
+  NO_COLOR                 Disable colored output (no-color.org convention)
+
+try: craftybase materials list
+
+Learn more at https://craftybase.com/docs/api
