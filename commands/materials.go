@@ -124,7 +124,7 @@ func runMaterialsList(cmd *cobra.Command, args []string) error {
 			TotalPages: envelope.Meta.TotalPages,
 			TotalCount: envelope.Meta.TotalCount,
 			PerPage:    envelope.Meta.PerPage,
-			Page:       envelope.Meta.Page,
+			Page:       envelope.Meta.CurrentPage,
 		}
 		return envelope.Materials, meta, nil
 	}
