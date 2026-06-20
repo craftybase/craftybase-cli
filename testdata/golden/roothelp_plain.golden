@@ -11,6 +11,7 @@ The command-line interface for Craftybase
   $ craftybase auth login | status | logout       Authenticate with Craftybase
   $ craftybase materials list | show              Manage materials
   $ craftybase products list | show               Manage products
+  $ craftybase components list | show             Manage components
   $ craftybase completion <shell>                 Generate shell completion scripts
   $ craftybase version                            Print version information
 
