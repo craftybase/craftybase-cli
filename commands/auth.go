@@ -8,11 +8,12 @@ import (
 	"os"
 	"strings"
 
+	"github.com/spf13/cobra"
+	"golang.org/x/term"
+
 	"github.com/craftybase/craftybase-cli/internal/api"
 	"github.com/craftybase/craftybase-cli/internal/brand"
 	"github.com/craftybase/craftybase-cli/internal/config"
-	"github.com/spf13/cobra"
-	"golang.org/x/term"
 )
 
 var authCmd = &cobra.Command{

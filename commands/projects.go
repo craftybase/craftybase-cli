@@ -11,9 +11,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/craftybase/craftybase-cli/internal/api"
 	"github.com/craftybase/craftybase-cli/internal/output"
-	"github.com/spf13/cobra"
 )
 
 // Project is a product or component (both are Projects on the API, distinguished

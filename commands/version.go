@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/craftybase/craftybase-cli/internal/brand"
 	"github.com/spf13/cobra"
+
+	"github.com/craftybase/craftybase-cli/internal/brand"
 )
 
 var versionCmd = &cobra.Command{

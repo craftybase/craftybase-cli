@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
+	"golang.org/x/term"
+
 	"github.com/craftybase/craftybase-cli/internal/api"
 	"github.com/craftybase/craftybase-cli/internal/config"
 	"github.com/craftybase/craftybase-cli/internal/output"
-	"github.com/spf13/cobra"
-	"golang.org/x/term"
 )
 
 var (
@@ -30,6 +31,12 @@ Authenticate once, then manage your inventory from the terminal.
 Documentation: https://craftybase.com/docs/api`,
 	SilenceUsage:  true,
 	SilenceErrors: true,
+}
+
+// RootCmd returns the assembled root command with all subcommands registered.
+// Exposed for documentation generation (see cmd/gen-docs).
+func RootCmd() *cobra.Command {
+	return rootCmd
 }
 
 func Execute(version string) {

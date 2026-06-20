@@ -10,9 +10,10 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/spf13/cobra"
+
 	"github.com/craftybase/craftybase-cli/internal/api"
 	"github.com/craftybase/craftybase-cli/internal/output"
-	"github.com/spf13/cobra"
 )
 
 type Material struct {

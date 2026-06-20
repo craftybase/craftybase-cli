@@ -5,8 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/craftybase/craftybase-cli/internal/brand"
 	"github.com/pelletier/go-toml/v2"
+
+	"github.com/craftybase/craftybase-cli/internal/brand"
 )
 
 type Profile struct {
@@ -133,7 +134,7 @@ func ResolvedToken(flagToken string, profile *Profile) string {
 type TokenSource int
 
 const (
-	TokenSourceNone    TokenSource = iota
+	TokenSourceNone TokenSource = iota
 	TokenSourceFlag
 	TokenSourceEnv
 	TokenSourceProfile

@@ -7,8 +7,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
 	"github.com/spf13/cobra"
+
+	"github.com/craftybase/craftybase-cli/internal/output"
 )
 
 var accountCmd = &cobra.Command{

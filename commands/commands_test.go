@@ -2,7 +2,6 @@ package commands_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -137,7 +136,6 @@ func TestCategoryFilterParam(t *testing.T) {
 
 func TestMaskToken_Format(t *testing.T) {
 	// Token masking format: first 9 chars + … + last 4
-	_ = fmt.Sprintf("live_a1b2…g7h8")
 	if !strings.Contains("live_a1b2…g7h8", "…") {
 		t.Error("mask format should contain ellipsis")
 	}

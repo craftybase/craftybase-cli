@@ -6,9 +6,10 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/spf13/cobra"
+
 	"github.com/craftybase/craftybase-cli/internal/brand"
 	"github.com/craftybase/craftybase-cli/internal/output"
-	"github.com/spf13/cobra"
 )
 
 // rootLogo is the flat-teal CRAFTYBASE wordmark (48x3). Raw segments are joined

@@ -4,3 +4,6 @@ dist/
 *.out
 .DS_Store
 testdata/golden/*.got
+website/node_modules
+website/dist
+website/.astro
