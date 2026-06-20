@@ -37,6 +37,8 @@ craftybase [flags]
 * [craftybase api](/reference/craftybase_api/)	 - Make authenticated API requests
 * [craftybase auth](/reference/craftybase_auth/)	 - Manage authentication credentials
 * [craftybase completion](/reference/craftybase_completion/)	 - Generate shell completion scripts
+* [craftybase components](/reference/craftybase_components/)	 - Manage components
 * [craftybase materials](/reference/craftybase_materials/)	 - Manage materials
+* [craftybase products](/reference/craftybase_products/)	 - Manage products
 * [craftybase version](/reference/craftybase_version/)	 - Print version information
 
