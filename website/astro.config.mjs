@@ -1,11 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightLlmsTxt from 'starlight-llms-txt';
 
 export default defineConfig({
   site: 'https://cli.craftybase.dev',
   integrations: [
     starlight({
+      plugins: [starlightLlmsTxt()],
       title: 'Craftybase CLI',
       description: 'The command-line interface for Craftybase.',
       social: [
