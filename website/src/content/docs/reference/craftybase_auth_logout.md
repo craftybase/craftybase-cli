@@ -1,6 +1,6 @@
 ---
-title: craftybase auth logout
-description: Reference for the craftybase auth logout command.
+title: "craftybase auth logout"
+description: "Reference for the craftybase auth logout command."
 ---
 
 ## craftybase auth logout

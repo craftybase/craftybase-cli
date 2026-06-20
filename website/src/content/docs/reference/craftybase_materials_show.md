@@ -1,6 +1,6 @@
 ---
-title: craftybase materials show
-description: Reference for the craftybase materials show command.
+title: "craftybase materials show"
+description: "Reference for the craftybase materials show command."
 ---
 
 ## craftybase materials show

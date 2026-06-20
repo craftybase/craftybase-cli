@@ -1,6 +1,6 @@
 ---
-title: craftybase api
-description: Reference for the craftybase api command.
+title: "craftybase api"
+description: "Reference for the craftybase api command."
 ---
 
 ## craftybase api

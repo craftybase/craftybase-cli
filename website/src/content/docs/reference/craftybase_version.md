@@ -1,6 +1,6 @@
 ---
-title: craftybase version
-description: Reference for the craftybase version command.
+title: "craftybase version"
+description: "Reference for the craftybase version command."
 ---
 
 ## craftybase version

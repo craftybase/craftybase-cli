@@ -10,8 +10,8 @@ func TestFilePrepender(t *testing.T) {
 	if !strings.HasPrefix(got, "---\n") {
 		t.Fatalf("expected YAML frontmatter, got %q", got)
 	}
-	if !strings.Contains(got, "title: craftybase materials list") {
-		t.Errorf("expected derived title, got %q", got)
+	if !strings.Contains(got, `title: "craftybase materials list"`) {
+		t.Errorf("expected quoted derived title, got %q", got)
 	}
 }
 

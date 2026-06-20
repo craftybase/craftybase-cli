@@ -13,6 +13,7 @@ import (
 	"github.com/spf13/cobra/doc"
 )
 
+// outDir is relative to the repo root; run gen-docs from there.
 const outDir = "website/src/content/docs/reference"
 
 func main() {
@@ -26,7 +27,10 @@ func run() error {
 		return err
 	}
 	// Remove stale generated files so deletions/renames don't linger.
-	entries, _ := filepath.Glob(filepath.Join(outDir, "*.md"))
+	entries, err := filepath.Glob(filepath.Join(outDir, "*.md"))
+	if err != nil {
+		return err
+	}
 	for _, f := range entries {
 		if err := os.Remove(f); err != nil {
 			return err
@@ -41,7 +45,7 @@ func run() error {
 func filePrepender(filename string) string {
 	base := strings.TrimSuffix(filepath.Base(filename), ".md")
 	title := strings.ReplaceAll(base, "_", " ")
-	return fmt.Sprintf("---\ntitle: %s\ndescription: Reference for the %s command.\n---\n\n", title, title)
+	return fmt.Sprintf("---\ntitle: %q\ndescription: %q\n---\n\n", title, fmt.Sprintf("Reference for the %s command.", title))
 }
 
 // linkHandler maps a generated filename to its Starlight route.

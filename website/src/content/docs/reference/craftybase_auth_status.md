@@ -1,6 +1,6 @@
 ---
-title: craftybase auth status
-description: Reference for the craftybase auth status command.
+title: "craftybase auth status"
+description: "Reference for the craftybase auth status command."
 ---
 
 ## craftybase auth status

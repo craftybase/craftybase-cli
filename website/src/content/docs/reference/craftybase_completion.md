@@ -1,6 +1,6 @@
 ---
-title: craftybase completion
-description: Reference for the craftybase completion command.
+title: "craftybase completion"
+description: "Reference for the craftybase completion command."
 ---
 
 ## craftybase completion

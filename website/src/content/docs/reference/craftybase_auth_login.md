@@ -1,6 +1,6 @@
 ---
-title: craftybase auth login
-description: Reference for the craftybase auth login command.
+title: "craftybase auth login"
+description: "Reference for the craftybase auth login command."
 ---
 
 ## craftybase auth login
