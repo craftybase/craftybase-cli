@@ -32,6 +32,12 @@ Documentation: https://craftybase.com/docs/api`,
 	SilenceErrors: true,
 }
 
+// RootCmd returns the assembled root command with all subcommands registered.
+// Exposed for documentation generation (see cmd/gen-docs).
+func RootCmd() *cobra.Command {
+	return rootCmd
+}
+
 func Execute(version string) {
 	err := rootCmd.Execute()
 	if err != nil {
