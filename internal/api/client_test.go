@@ -292,7 +292,7 @@ func TestWalkPages_AllItems(t *testing.T) {
 				TotalPages: envelope.Meta.TotalPages,
 				TotalCount: envelope.Meta.TotalCount,
 				PerPage:    envelope.Meta.PerPage,
-				Page:       envelope.Meta.Page,
+				Page:       envelope.Meta.CurrentPage,
 			}
 			return envelope.Materials, meta, nil
 		},

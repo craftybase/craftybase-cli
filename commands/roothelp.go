@@ -13,14 +13,18 @@ import (
 
 // rootLogo is the flat-teal CRAFTYBASE wordmark (48x3). Raw segments are joined
 // around literal backticks so backslashes stay literal.
+//
+// NOTE: this art literally spells the product name, so — unlike the other
+// brand-bearing strings, which route through internal/brand — it cannot be
+// centralized. Regenerate it as part of the planned Stocksmith rebrand.
 const rootLogo = ` __   __        ___ ___      __        __   ___
 /  ` + "`" + ` |__)  /\  |__   |  \ / |__)  /\  /__` + "`" + ` |__
 \__, |  \ /~~\ |     |   |  |__) /~~\ .__/ |___ `
 
 const (
-	tagline    = "The command-line interface for Craftybase"
-	tryExample = "craftybase materials list"
-	docsURL    = "https://craftybase.com/docs/api"
+	tagline    = "The command-line interface for " + brand.ProductName
+	tryExample = brand.BinaryName + " materials list"
+	docsURL    = brand.DocsURL
 )
 
 const descCol = 48 // column (in the command list) where descriptions start
@@ -38,8 +42,10 @@ var commandRows = []cmdRow{
 	{name: "help", args: "<command>", desc: "Display help for a command"},
 	{name: "account"},
 	{name: "api", args: "<METHOD> <path>"},
-	{name: "auth", subs: []string{"login", "status", "logout"}, desc: "Authenticate with Craftybase"},
+	{name: "auth", subs: []string{"login", "status", "logout"}, desc: "Authenticate with " + brand.ProductName},
 	{name: "materials", subs: []string{"list", "show"}},
+	{name: "products", subs: []string{"list", "show"}},
+	{name: "components", subs: []string{"list", "show"}},
 	{name: "completion", args: "<shell>", desc: "Generate shell completion scripts"},
 	{name: "version"},
 }
@@ -96,7 +102,7 @@ func renderRootHelp(root *cobra.Command, w io.Writer, opts renderOpts) {
 			fmt.Fprintln(w, st.Fg(output.TealBright, line))
 		}
 	} else {
-		fmt.Fprintln(w, st.Bold("Craftybase"))
+		fmt.Fprintln(w, st.Bold(brand.ProductName))
 	}
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, st.Bold(tagline))
@@ -159,7 +165,7 @@ func renderCommandRow(st output.Styler, root *cobra.Command, r cmdRow) string {
 	add := func(p, c string) { plain.WriteString(p); colored.WriteString(c) }
 
 	add("$ ", st.Fg(output.GrayDim, "$ "))
-	add("craftybase ", st.Fg(output.TealBright, "craftybase "))
+	add(brand.BinaryName+" ", st.Fg(output.TealBright, brand.BinaryName+" "))
 	add(r.name, st.Fg(output.TealBright, r.name))
 	if r.args != "" {
 		add(" "+r.args, st.Fg(output.GrayDim, " "+r.args))

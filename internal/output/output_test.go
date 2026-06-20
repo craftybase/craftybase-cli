@@ -3,11 +3,14 @@ package output_test
 import (
 	"bytes"
 	"encoding/json"
+	"regexp"
 	"strings"
 	"testing"
 
 	"github.com/craftybase/craftybase-cli/internal/output"
 )
+
+var ansiRE = regexp.MustCompile("\x1b\\[[0-9;]*m")
 
 func TestFormatMoney_USD(t *testing.T) {
 	m := &output.Money{Amount: "8.75", CurrencyCode: "USD"}
@@ -85,6 +88,27 @@ func TestFormatTable_NoColor(t *testing.T) {
 	}
 	if strings.Contains(got, "\033[") {
 		t.Error("expected no ANSI codes in no-color mode")
+	}
+}
+
+// Color must never change column layout. Rendering with color on, then
+// stripping the ANSI sequences, must yield exactly the same bytes as
+// rendering with color off. (Regression: ANSI codes in bold headers were
+// counted as visible width by tabwriter, shifting headers out of alignment.)
+func TestFormatTable_ColorDoesNotChangeLayout(t *testing.T) {
+	headers := []string{"ID", "NAME", "SKU", "CATEGORY", "ON HAND", "UNIT COST"}
+	rows := [][]string{
+		{"20874123", "Homofuranol", "—", "aroma chemical", "1483.975 gram", "$0.0"},
+		{"20876805", "Lavender high elevation", "—", "aroma chemical", "251.25 gram", "$0.0"},
+	}
+
+	var plain, colored bytes.Buffer
+	output.FormatTable(&plain, headers, rows, false)
+	output.FormatTable(&colored, headers, rows, true)
+
+	stripped := ansiRE.ReplaceAllString(colored.String(), "")
+	if stripped != plain.String() {
+		t.Errorf("colored layout (ANSI stripped) must equal plain layout\n--- plain ---\n%q\n--- colored, stripped ---\n%q", plain.String(), stripped)
 	}
 }
 

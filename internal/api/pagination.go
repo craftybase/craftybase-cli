@@ -16,10 +16,10 @@ type PageMeta struct {
 }
 
 type RawPageMeta struct {
-	TotalPages int `json:"total_pages"`
-	TotalCount int `json:"total_count"`
-	PerPage    int `json:"per_page"`
-	Page       int `json:"page"`
+	TotalPages  int `json:"total_pages"`
+	TotalCount  int `json:"total_count"`
+	PerPage     int `json:"per_page"`
+	CurrentPage int `json:"current_page"`
 }
 
 func WalkPages(
