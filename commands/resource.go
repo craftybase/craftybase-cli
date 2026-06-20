@@ -48,7 +48,7 @@ func newResourceListCmd(res resourceConfig, f *resourceListFlags) *cobra.Command
 		Short: "List " + res.collection,
 		Long:  res.listLong,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runResourceList(res, f)
+			return runResourceList(cmd.Context(), res, f)
 		},
 	}
 	cmd.Flags().StringVar(&f.sku, "sku", "", "Filter by SKU (exact match)")
@@ -67,7 +67,7 @@ func newResourceShowCmd(res resourceConfig) *cobra.Command {
 		Short: "Show a single " + res.singular,
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runResourceShow(res, args[0])
+			return runResourceShow(cmd.Context(), res, args[0])
 		},
 	}
 }
@@ -87,7 +87,7 @@ func validateListFlags(jsonOut, ndjson, all bool, page int) error {
 	return nil
 }
 
-func runResourceList(res resourceConfig, f *resourceListFlags) error {
+func runResourceList(ctx context.Context, res resourceConfig, f *resourceListFlags) error {
 	if err := validateListFlags(flagJSON, flagNDJSON, f.all, f.page); err != nil {
 		return err
 	}
@@ -168,7 +168,6 @@ func runResourceList(res resourceConfig, f *resourceListFlags) error {
 	}
 
 	if flagNDJSON {
-		ctx := context.Background()
 		var total int
 		err := api.WalkPages(ctx, fetchPage, func(item json.RawMessage) {
 			total++
@@ -187,7 +186,7 @@ func runResourceList(res resourceConfig, f *resourceListFlags) error {
 			page = 1
 		}
 		reqURL := client.BaseURL + "/api/v1/" + res.pathSegment + buildParams(page, f.perPage)
-		req, err := http.NewRequest("GET", reqURL, nil)
+		req, err := http.NewRequestWithContext(ctx, "GET", reqURL, nil)
 		if err != nil {
 			return err
 		}
@@ -205,7 +204,6 @@ func runResourceList(res resourceConfig, f *resourceListFlags) error {
 
 	if f.all {
 		var allItems []json.RawMessage
-		ctx := context.Background()
 		err := api.WalkPages(ctx, fetchPage, func(item json.RawMessage) {
 			allItems = append(allItems, item)
 		})
@@ -222,7 +220,7 @@ func runResourceList(res resourceConfig, f *resourceListFlags) error {
 	if page == 0 {
 		page = 1
 	}
-	items, meta, err := fetchPage(context.Background(), page)
+	items, meta, err := fetchPage(ctx, page)
 	if err != nil {
 		return err
 	}
@@ -232,12 +230,12 @@ func runResourceList(res resourceConfig, f *resourceListFlags) error {
 	return nil
 }
 
-func runResourceShow(res resourceConfig, id string) error {
+func runResourceShow(ctx context.Context, res resourceConfig, id string) error {
 	client, _, err := requireAuth()
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest("GET", client.BaseURL+"/api/v1/"+res.pathSegment+"/"+id, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", client.BaseURL+"/api/v1/"+res.pathSegment+"/"+id, nil)
 	if err != nil {
 		return fmt.Errorf("build request: %w", err)
 	}
