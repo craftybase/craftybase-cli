@@ -44,6 +44,7 @@ var commandRows = []cmdRow{
 	{name: "api", args: "<METHOD> <path>"},
 	{name: "auth", subs: []string{"login", "status", "logout"}, desc: "Authenticate with " + brand.ProductName},
 	{name: "materials", subs: []string{"list", "show"}},
+	{name: "products", subs: []string{"list", "show"}},
 	{name: "completion", args: "<shell>", desc: "Generate shell completion scripts"},
 	{name: "version"},
 }
