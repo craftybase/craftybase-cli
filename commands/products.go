@@ -7,15 +7,17 @@ var productsCmd = &cobra.Command{
 	Short: "Manage products",
 }
 
-var productsListFlags projectListFlags
+var productsListFlags resourceListFlags
 
 func init() {
-	res := projectResource{
+	res := resourceConfig{
 		pathSegment: "products",
 		collection:  "products",
 		singular:    "product",
+		toTable:     projectsToTable,
+		renderShow:  renderProjectShowRaw,
 	}
-	productsCmd.AddCommand(newProjectListCmd(res, &productsListFlags))
-	productsCmd.AddCommand(newProjectShowCmd(res))
+	productsCmd.AddCommand(newResourceListCmd(res, &productsListFlags))
+	productsCmd.AddCommand(newResourceShowCmd(res))
 	rootCmd.AddCommand(productsCmd)
 }

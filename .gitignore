@@ -7,3 +7,6 @@ testdata/golden/*.got
 website/node_modules
 website/dist
 website/.astro
+
+# Superpowers workflow artifacts (specs/plans) — ticket planning docs live in craftybase-vault
+docs/superpowers/
