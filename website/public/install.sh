@@ -29,7 +29,8 @@ detect_os() {
   case "$(uname -s)" in
     Linux)  printf 'linux' ;;
     Darwin) printf 'darwin' ;;
-    *) err "unsupported OS '$(uname -s)'. On Windows, download a release from https://github.com/$REPO/releases or use WSL. See https://cli.craftybase.dev/getting-started/." ;;
+    MINGW*|MSYS*|CYGWIN*) err "Windows isn't supported by this installer. Use WSL, or download a release zip from https://github.com/$REPO/releases. See https://cli.craftybase.dev/getting-started/." ;;
+    *) err "unsupported OS '$(uname -s)'. Download a release from https://github.com/$REPO/releases or install via Homebrew. See https://cli.craftybase.dev/getting-started/." ;;
   esac
 }
 detect_arch() {
@@ -68,7 +69,7 @@ download_file "$ASSET_URL" "$tmp/$ARCHIVE"
 download_file "$BASE/$CHECKSUMS" "$tmp/$CHECKSUMS"
 
 info "Verifying checksum…"
-want=$(grep " $ARCHIVE\$" "$tmp/$CHECKSUMS" | awk '{print $1}')
+want=$(grep -F " $ARCHIVE" "$tmp/$CHECKSUMS" | awk '{print $1}')
 [ -n "$want" ] || err "no checksum for $ARCHIVE"
 got=$(sha256_of "$tmp/$ARCHIVE")
 [ "$want" = "$got" ] || err "checksum mismatch (want $want, got $got)"
