@@ -81,9 +81,10 @@ func joinAttributes(attrs []VariationAttribute) string {
 func projectsToTable(raw []json.RawMessage) ([]string, [][]string) {
 	headers := []string{"ID", "NAME", "SKU", "CATEGORY", "VARIANTS", "ON HAND", "AVAILABLE", "UNIT PRICE"}
 	rows := make([][]string, 0, len(raw))
-	for _, r := range raw {
+	for i, r := range raw {
 		var p Project
 		if err := json.Unmarshal(r, &p); err != nil {
+			warnSkip(i, err)
 			continue
 		}
 		rows = append(rows, projectToRow(&p))

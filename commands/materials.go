@@ -29,9 +29,10 @@ var materialsListFlags resourceListFlags
 func materialsToTable(rawItems []json.RawMessage) ([]string, [][]string) {
 	headers := []string{"ID", "NAME", "SKU", "CATEGORY", "ON HAND", "UNIT COST"}
 	rows := make([][]string, 0, len(rawItems))
-	for _, raw := range rawItems {
+	for i, raw := range rawItems {
 		var m Material
 		if err := json.Unmarshal(raw, &m); err != nil {
+			warnSkip(i, err)
 			continue
 		}
 		rows = append(rows, materialToRow(&m))

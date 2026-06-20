@@ -15,6 +15,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// warnWriter receives non-fatal warnings (e.g. skipped malformed list items).
+// It is os.Stderr in production; tests may redirect it.
+var warnWriter io.Writer = os.Stderr
+
+// warnSkip reports a list item that could not be decoded, so a dropped row is
+// never silent.
+func warnSkip(index int, err error) {
+	fmt.Fprintf(warnWriter, "warning: skipping malformed item at index %d: %v\n", index, err)
+}
+
 // resourceConfig configures the shared list/show runners for one resource.
 type resourceConfig struct {
 	pathSegment string // URL segment under /api/v1/, e.g. "materials"

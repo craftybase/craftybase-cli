@@ -146,3 +146,25 @@ func TestRenderProjectShowRaw_EmptyRawRendersZeroValue(t *testing.T) {
 		t.Errorf("empty raw should render a zero-value project, got:\n%s", buf.String())
 	}
 }
+
+func TestProjectsToTable_WarnsAndSkipsMalformed(t *testing.T) {
+	orig := warnWriter
+	var buf bytes.Buffer
+	warnWriter = &buf
+	defer func() { warnWriter = orig }()
+
+	good := json.RawMessage(`{"id":1,"name":"Good","stock_on_hand":"5","available_stock":"5"}`)
+	bad := json.RawMessage(`{"id":"not-an-int"}`) // id type mismatch => unmarshal error
+
+	_, rows := projectsToTable([]json.RawMessage{good, bad})
+
+	if len(rows) != 1 {
+		t.Fatalf("expected 1 row (malformed item skipped), got %d", len(rows))
+	}
+	if rows[0][1] != "Good" {
+		t.Errorf("expected the good row to survive, got %v", rows[0])
+	}
+	if !strings.Contains(buf.String(), "skipping malformed item at index 1") {
+		t.Errorf("expected a warning naming index 1, got %q", buf.String())
+	}
+}
