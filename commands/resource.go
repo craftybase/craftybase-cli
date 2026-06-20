@@ -62,17 +62,29 @@ func newResourceShowCmd(res resourceConfig) *cobra.Command {
 	}
 }
 
+// validateListFlags rejects the output-mode / pagination combinations the list
+// runner cannot honor. Pure (no auth or HTTP) so the precedence is unit-testable.
+func validateListFlags(jsonOut, ndjson, all bool, page int) error {
+	if all && ndjson {
+		return fmt.Errorf("--all and --ndjson are mutually exclusive")
+	}
+	if all && page > 0 {
+		return fmt.Errorf("--all and --page are mutually exclusive")
+	}
+	if jsonOut && all {
+		return fmt.Errorf("--json and --all are mutually exclusive (use --ndjson to stream all pages as JSON)")
+	}
+	return nil
+}
+
 func runResourceList(res resourceConfig, f *resourceListFlags) error {
-	client, _, err := requireAuth()
-	if err != nil {
+	if err := validateListFlags(flagJSON, flagNDJSON, f.all, f.page); err != nil {
 		return err
 	}
 
-	if f.all && flagNDJSON {
-		return fmt.Errorf("--all and --ndjson are mutually exclusive")
-	}
-	if f.all && f.page > 0 {
-		return fmt.Errorf("--all and --page are mutually exclusive")
+	client, _, err := requireAuth()
+	if err != nil {
+		return err
 	}
 
 	buildParams := func(page, perPage int) string {
@@ -159,7 +171,7 @@ func runResourceList(res resourceConfig, f *resourceListFlags) error {
 		return nil
 	}
 
-	if flagJSON && !f.all {
+	if flagJSON {
 		page := f.page
 		if page == 0 {
 			page = 1
