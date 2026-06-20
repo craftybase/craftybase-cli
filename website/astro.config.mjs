@@ -10,6 +10,11 @@ export default defineConfig({
       plugins: [starlightLlmsTxt()],
       title: 'Craftybase CLI',
       description: 'The command-line interface for Craftybase.',
+      favicon: '/favicon.svg',
+      head: [
+        { tag: 'meta', attrs: { property: 'og:image', content: 'https://cli.craftybase.dev/favicon.svg' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#3EB1C1' } },
+      ],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/craftybase/craftybase-cli' },
       ],
