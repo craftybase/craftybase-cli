@@ -1,19 +1,13 @@
 package commands
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	"net/http"
-	"net/url"
-	"os"
 	"strconv"
 	"strings"
 
-	"github.com/craftybase/craftybase-cli/internal/api"
 	"github.com/craftybase/craftybase-cli/internal/output"
-	"github.com/spf13/cobra"
 )
 
 // Project is a product or component (both are Projects on the API, distinguished
@@ -157,229 +151,16 @@ func renderProjectShow(w io.Writer, p *Project, useColor bool) {
 	output.FormatTable(w, vh, vr, useColor)
 }
 
-// projectResource configures the shared list/show runners for one resource.
-type projectResource struct {
-	pathSegment string // URL segment, e.g. "products"
-	collection  string // list envelope key, e.g. "products"
-	singular    string // show envelope key, e.g. "product"
-}
-
-type projectListFlags struct {
-	sku, name, category, state string
-	page, perPage              int
-	all                        bool
-}
-
-func newProjectListCmd(res projectResource, f *projectListFlags) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "list",
-		Short: "List " + res.collection,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return runProjectList(res, f)
-		},
-	}
-	cmd.Flags().StringVar(&f.sku, "sku", "", "Filter by SKU (exact match)")
-	cmd.Flags().StringVar(&f.name, "name", "", "Filter by name (substring match)")
-	cmd.Flags().StringVar(&f.category, "category", "", "Filter by category name")
-	cmd.Flags().StringVar(&f.state, "state", "", "Filter by state: active, archived, all")
-	cmd.Flags().IntVar(&f.page, "page", 0, "Page number (1-based)")
-	cmd.Flags().IntVar(&f.perPage, "per-page", 0, "Items per page (server clamps to 100)")
-	cmd.Flags().BoolVar(&f.all, "all", false, "Fetch all pages and render as a single table")
-	return cmd
-}
-
-func newProjectShowCmd(res projectResource) *cobra.Command {
-	return &cobra.Command{
-		Use:   "show <id>",
-		Short: "Show a single " + res.singular,
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return runProjectShow(res, args[0])
-		},
-	}
-}
-
-func runProjectList(res projectResource, f *projectListFlags) error {
-	client, _, err := requireAuth()
-	if err != nil {
-		return err
-	}
-
-	if f.all && flagNDJSON {
-		return fmt.Errorf("--all and --ndjson are mutually exclusive")
-	}
-	if f.all && f.page > 0 {
-		return fmt.Errorf("--all and --page are mutually exclusive")
-	}
-
-	buildParams := func(page, perPage int) string {
-		params := url.Values{}
-		if f.sku != "" {
-			params.Set("sku", f.sku)
-		}
-		if f.name != "" {
-			params.Set("name", f.name)
-		}
-		if f.category != "" {
-			params.Set("category_name", f.category)
-		}
-		if f.state != "" {
-			params.Set("state", f.state)
-		}
-		if page > 0 {
-			params.Set("page", strconv.Itoa(page))
-		}
-		if perPage > 0 {
-			params.Set("per_page", strconv.Itoa(perPage))
-		}
-		q := params.Encode()
-		if q != "" {
-			return "?" + q
-		}
-		return ""
-	}
-
-	fetchPage := func(ctx context.Context, page int) ([]json.RawMessage, api.PageMeta, error) {
-		perPage := f.perPage
-		if f.all && perPage == 0 {
-			perPage = 100
-		}
-		reqURL := client.BaseURL + "/api/v1/" + res.pathSegment + buildParams(page, perPage)
-		req, err := http.NewRequestWithContext(ctx, "GET", reqURL, nil)
-		if err != nil {
-			return nil, api.PageMeta{}, err
-		}
-		resp, err := client.Do(req)
-		if err != nil {
-			return nil, api.PageMeta{}, err
-		}
-		defer resp.Body.Close()
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return nil, api.PageMeta{}, err
-		}
-
-		top := map[string]json.RawMessage{}
-		if err := json.Unmarshal(body, &top); err != nil {
-			return nil, api.PageMeta{}, fmt.Errorf("parse response: %w", err)
-		}
-		var items []json.RawMessage
-		if rawList, ok := top[res.collection]; ok {
-			if err := json.Unmarshal(rawList, &items); err != nil {
-				return nil, api.PageMeta{}, fmt.Errorf("parse response: %w", err)
-			}
-		}
-		var rawMeta api.RawPageMeta
-		if rawM, ok := top["meta"]; ok {
-			_ = json.Unmarshal(rawM, &rawMeta)
-		}
-		meta := api.PageMeta{
-			TotalPages: rawMeta.TotalPages,
-			TotalCount: rawMeta.TotalCount,
-			PerPage:    rawMeta.PerPage,
-			Page:       rawMeta.CurrentPage,
-		}
-		return items, meta, nil
-	}
-
-	if flagNDJSON {
-		ctx := context.Background()
-		var total int
-		err := api.WalkPages(ctx, fetchPage, func(item json.RawMessage) {
-			total++
-			output.WriteNDJSONLine(os.Stdout, item) //nolint:errcheck
-		})
-		if err != nil {
-			return err
-		}
-		fmt.Fprintf(os.Stderr, "(%d total)\n", total)
-		return nil
-	}
-
-	if flagJSON && !f.all {
-		page := f.page
-		if page == 0 {
-			page = 1
-		}
-		reqURL := client.BaseURL + "/api/v1/" + res.pathSegment + buildParams(page, f.perPage)
-		req, err := http.NewRequest("GET", reqURL, nil)
-		if err != nil {
-			return err
-		}
-		resp, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return err
-		}
-		return output.PrintJSON(os.Stdout, body)
-	}
-
-	if f.all {
-		var allItems []json.RawMessage
-		ctx := context.Background()
-		err := api.WalkPages(ctx, fetchPage, func(item json.RawMessage) {
-			allItems = append(allItems, item)
-		})
-		if err != nil {
-			return err
-		}
-		headers, rows := projectsToTable(allItems)
-		output.FormatTable(os.Stdout, headers, rows, output.ColorEnabled(flagNoColor))
-		fmt.Fprintf(os.Stdout, "(%d total)\n", len(allItems))
-		return nil
-	}
-
-	page := f.page
-	if page == 0 {
-		page = 1
-	}
-	items, meta, err := fetchPage(context.Background(), page)
-	if err != nil {
-		return err
-	}
-	headers, rows := projectsToTable(items)
-	output.FormatTable(os.Stdout, headers, rows, output.ColorEnabled(flagNoColor))
-	fmt.Fprintf(os.Stdout, "(%d of %d)\n", len(items), meta.TotalCount)
-	return nil
-}
-
-func runProjectShow(res projectResource, id string) error {
-	client, _, err := requireAuth()
-	if err != nil {
-		return err
-	}
-	req, err := http.NewRequest("GET", client.BaseURL+"/api/v1/"+res.pathSegment+"/"+id, nil)
-	if err != nil {
-		return fmt.Errorf("build request: %w", err)
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("read response: %w", err)
-	}
-
-	if flagJSON {
-		return output.PrintJSON(os.Stdout, body)
-	}
-
-	top := map[string]json.RawMessage{}
-	if err := json.Unmarshal(body, &top); err != nil {
-		return fmt.Errorf("parse response: %w", err)
-	}
+// renderProjectShowRaw adapts renderProjectShow to the resourceConfig.renderShow
+// signature. An empty raw (missing envelope key) renders a zero-value Project,
+// preserving the prior behavior.
+func renderProjectShowRaw(w io.Writer, raw json.RawMessage, useColor bool) error {
 	var p Project
-	if rawObj, ok := top[res.singular]; ok {
-		if err := json.Unmarshal(rawObj, &p); err != nil {
+	if len(raw) > 0 {
+		if err := json.Unmarshal(raw, &p); err != nil {
 			return fmt.Errorf("parse response: %w", err)
 		}
 	}
-	renderProjectShow(os.Stdout, &p, output.ColorEnabled(flagNoColor))
+	renderProjectShow(w, &p, useColor)
 	return nil
 }

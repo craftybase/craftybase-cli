@@ -7,15 +7,17 @@ var componentsCmd = &cobra.Command{
 	Short: "Manage components",
 }
 
-var componentsListFlags projectListFlags
+var componentsListFlags resourceListFlags
 
 func init() {
-	res := projectResource{
+	res := resourceConfig{
 		pathSegment: "components",
 		collection:  "components",
 		singular:    "component",
+		toTable:     projectsToTable,
+		renderShow:  renderProjectShowRaw,
 	}
-	componentsCmd.AddCommand(newProjectListCmd(res, &componentsListFlags))
-	componentsCmd.AddCommand(newProjectShowCmd(res))
+	componentsCmd.AddCommand(newResourceListCmd(res, &componentsListFlags))
+	componentsCmd.AddCommand(newResourceShowCmd(res))
 	rootCmd.AddCommand(componentsCmd)
 }

@@ -123,3 +123,26 @@ func TestRenderProjectShow_NoVariations(t *testing.T) {
 		t.Errorf("expected empty-variations notice, got:\n%s", out)
 	}
 }
+
+func TestRenderProjectShowRaw_UnmarshalsAndRenders(t *testing.T) {
+	var buf bytes.Buffer
+	if err := renderProjectShowRaw(&buf, sampleProductJSON(), false); err != nil {
+		t.Fatal(err)
+	}
+	out := buf.String()
+	for _, want := range []string{"Beeswax Candle", "STATE", "active", "VARIATIONS (2)", "CDL-001-S"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("show output missing %q\n---\n%s", want, out)
+		}
+	}
+}
+
+func TestRenderProjectShowRaw_EmptyRawRendersZeroValue(t *testing.T) {
+	var buf bytes.Buffer
+	if err := renderProjectShowRaw(&buf, nil, false); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(buf.String(), "VARIATIONS (0)") {
+		t.Errorf("empty raw should render a zero-value project, got:\n%s", buf.String())
+	}
+}
