@@ -7,7 +7,10 @@ var componentsCmd = &cobra.Command{
 	Short: "Manage components",
 }
 
-var componentsListFlags resourceListFlags
+var (
+	componentsFilters    projectFilters
+	componentsPagination paginationFlags
+)
 
 func init() {
 	res := resourceConfig{
@@ -17,7 +20,7 @@ func init() {
 		toTable:     projectsToTable,
 		renderShow:  renderProjectShowRaw,
 	}
-	componentsCmd.AddCommand(newResourceListCmd(res, &componentsListFlags))
+	componentsCmd.AddCommand(newResourceListCmd(res, &componentsFilters, &componentsPagination))
 	componentsCmd.AddCommand(newResourceShowCmd(res))
 	rootCmd.AddCommand(componentsCmd)
 }

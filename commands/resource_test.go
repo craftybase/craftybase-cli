@@ -1,9 +1,33 @@
 package commands
 
 import (
+	"net/url"
 	"strings"
 	"testing"
 )
+
+func TestProjectFilters_Apply(t *testing.T) {
+	f := projectFilters{sku: "WAX-001", name: "bees", category: "Waxes", state: "active"}
+	params := url.Values{}
+	f.apply(params)
+	want := map[string]string{
+		"sku":           "WAX-001",
+		"name":          "bees",
+		"category_name": "Waxes", // category maps to category_name
+		"state":         "active",
+	}
+	for k, v := range want {
+		if params.Get(k) != v {
+			t.Errorf("param %q: want %q, got %q", k, v, params.Get(k))
+		}
+	}
+
+	empty := url.Values{}
+	(&projectFilters{}).apply(empty)
+	if len(empty) != 0 {
+		t.Errorf("empty filters should set no params, got %v", empty)
+	}
+}
 
 func TestValidateListFlags(t *testing.T) {
 	cases := []struct {

@@ -37,28 +37,61 @@ type resourceConfig struct {
 	renderShow func(w io.Writer, raw json.RawMessage, useColor bool) error
 }
 
-type resourceListFlags struct {
-	sku, name, category, state string
-	page, perPage              int
-	all                        bool
+// listFilters supplies a resource's filter flags and their query contribution.
+// The runner owns pagination (page/per_page/all); a listFilters owns everything
+// resource-specific (e.g. --sku, --status).
+type listFilters interface {
+	addFlags(cmd *cobra.Command)
+	apply(params url.Values)
 }
 
-func newResourceListCmd(res resourceConfig, f *resourceListFlags) *cobra.Command {
+// paginationFlags are the universal list flags every resource shares.
+type paginationFlags struct {
+	page, perPage int
+	all           bool
+}
+
+// projectFilters are the shared filters for the project-family resources
+// (materials, products, components).
+type projectFilters struct {
+	sku, name, category, state string
+}
+
+func (f *projectFilters) addFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&f.sku, "sku", "", "Filter by SKU (exact match)")
+	cmd.Flags().StringVar(&f.name, "name", "", "Filter by name (substring match)")
+	cmd.Flags().StringVar(&f.category, "category", "", "Filter by category name")
+	cmd.Flags().StringVar(&f.state, "state", "", "Filter by state: active, archived, all")
+}
+
+func (f *projectFilters) apply(params url.Values) {
+	if f.sku != "" {
+		params.Set("sku", f.sku)
+	}
+	if f.name != "" {
+		params.Set("name", f.name)
+	}
+	if f.category != "" {
+		params.Set("category_name", f.category)
+	}
+	if f.state != "" {
+		params.Set("state", f.state)
+	}
+}
+
+func newResourceListCmd(res resourceConfig, filters listFilters, pag *paginationFlags) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List " + res.collection,
 		Long:  res.listLong,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runResourceList(cmd.Context(), res, f)
+			return runResourceList(cmd.Context(), res, filters, pag)
 		},
 	}
-	cmd.Flags().StringVar(&f.sku, "sku", "", "Filter by SKU (exact match)")
-	cmd.Flags().StringVar(&f.name, "name", "", "Filter by name (substring match)")
-	cmd.Flags().StringVar(&f.category, "category", "", "Filter by category name")
-	cmd.Flags().StringVar(&f.state, "state", "", "Filter by state: active, archived, all")
-	cmd.Flags().IntVar(&f.page, "page", 0, "Page number (1-based)")
-	cmd.Flags().IntVar(&f.perPage, "per-page", 0, "Items per page (server clamps to 100)")
-	cmd.Flags().BoolVar(&f.all, "all", false, "Fetch all pages and render as a single table")
+	filters.addFlags(cmd)
+	cmd.Flags().IntVar(&pag.page, "page", 0, "Page number (1-based)")
+	cmd.Flags().IntVar(&pag.perPage, "per-page", 0, "Items per page (server clamps to 100)")
+	cmd.Flags().BoolVar(&pag.all, "all", false, "Fetch all pages and render as a single table")
 	return cmd
 }
 
@@ -88,8 +121,8 @@ func validateListFlags(jsonOut, ndjson, all bool, page int) error {
 	return nil
 }
 
-func runResourceList(ctx context.Context, res resourceConfig, f *resourceListFlags) error {
-	if err := validateListFlags(flagJSON, flagNDJSON, f.all, f.page); err != nil {
+func runResourceList(ctx context.Context, res resourceConfig, filters listFilters, pag *paginationFlags) error {
+	if err := validateListFlags(flagJSON, flagNDJSON, pag.all, pag.page); err != nil {
 		return err
 	}
 
@@ -100,18 +133,7 @@ func runResourceList(ctx context.Context, res resourceConfig, f *resourceListFla
 
 	buildParams := func(page, perPage int) string {
 		params := url.Values{}
-		if f.sku != "" {
-			params.Set("sku", f.sku)
-		}
-		if f.name != "" {
-			params.Set("name", f.name)
-		}
-		if f.category != "" {
-			params.Set("category_name", f.category)
-		}
-		if f.state != "" {
-			params.Set("state", f.state)
-		}
+		filters.apply(params)
 		if page > 0 {
 			params.Set("page", strconv.Itoa(page))
 		}
@@ -126,8 +148,8 @@ func runResourceList(ctx context.Context, res resourceConfig, f *resourceListFla
 	}
 
 	fetchPage := func(ctx context.Context, page int) ([]json.RawMessage, api.PageMeta, error) {
-		perPage := f.perPage
-		if f.all && perPage == 0 {
+		perPage := pag.perPage
+		if pag.all && perPage == 0 {
 			perPage = 100
 		}
 		reqURL := client.BaseURL + "/api/v1/" + res.pathSegment + buildParams(page, perPage)
@@ -182,11 +204,11 @@ func runResourceList(ctx context.Context, res resourceConfig, f *resourceListFla
 	}
 
 	if flagJSON {
-		page := f.page
+		page := pag.page
 		if page == 0 {
 			page = 1
 		}
-		reqURL := client.BaseURL + "/api/v1/" + res.pathSegment + buildParams(page, f.perPage)
+		reqURL := client.BaseURL + "/api/v1/" + res.pathSegment + buildParams(page, pag.perPage)
 		req, err := http.NewRequestWithContext(ctx, "GET", reqURL, nil)
 		if err != nil {
 			return err
@@ -203,7 +225,7 @@ func runResourceList(ctx context.Context, res resourceConfig, f *resourceListFla
 		return output.PrintJSON(os.Stdout, body)
 	}
 
-	if f.all {
+	if pag.all {
 		var allItems []json.RawMessage
 		err := api.WalkPages(ctx, fetchPage, func(item json.RawMessage) {
 			allItems = append(allItems, item)
@@ -217,7 +239,7 @@ func runResourceList(ctx context.Context, res resourceConfig, f *resourceListFla
 		return nil
 	}
 
-	page := f.page
+	page := pag.page
 	if page == 0 {
 		page = 1
 	}

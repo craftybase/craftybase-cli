@@ -25,7 +25,10 @@ var materialsCmd = &cobra.Command{
 	Short: "Manage materials",
 }
 
-var materialsListFlags resourceListFlags
+var (
+	materialsFilters    projectFilters
+	materialsPagination paginationFlags
+)
 
 func materialsToTable(rawItems []json.RawMessage) ([]string, [][]string) {
 	headers := []string{"ID", "NAME", "SKU", "CATEGORY", "ON HAND", "UNIT COST"}
@@ -86,7 +89,7 @@ or --ndjson for streaming NDJSON output suitable for data pipelines.`,
 		toTable:    materialsToTable,
 		renderShow: renderMaterialShow,
 	}
-	materialsCmd.AddCommand(newResourceListCmd(res, &materialsListFlags))
+	materialsCmd.AddCommand(newResourceListCmd(res, &materialsFilters, &materialsPagination))
 	materialsCmd.AddCommand(newResourceShowCmd(res))
 	rootCmd.AddCommand(materialsCmd)
 }
