@@ -17,6 +17,9 @@ jobs:
           cache: true
       - run: go test ./... -v -race
       - run: go vet ./...
+      # Build the CLI binary explicitly: `go build ./...` does NOT fail on a
+      # missing entry point, so this guards against cmd/craftybase going absent.
+      - run: go build -o /dev/null ./cmd/craftybase
 
   lint:
     runs-on: ubuntu-latest
