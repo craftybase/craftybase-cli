@@ -180,3 +180,53 @@ func TestManufactureListFixture_ContractCheck(t *testing.T) {
 		t.Errorf("money amount must be a string, got %T", cost["amount"])
 	}
 }
+
+func recipeListFixture() []byte {
+	return []byte(`{
+		"recipes": [
+			{"id": 42, "product_id": 7, "product_name": "Soy Candle",
+			 "variation_id": null, "variation_name": null, "name": "Base Recipe",
+			 "manufacture_batch_quantity": "10.0", "manufacture_minutes": 60,
+			 "ingredients": [{"id": 5001, "material_id": 312, "material_name": "Soy Wax",
+			   "quantity": "200.0", "unit": "grams"}],
+			 "total_cost": {"amount": "50.00", "currency_code": "USD"},
+			 "unit_cogs": {"amount": "6.50", "currency_code": "USD"}}
+		],
+		"meta": {"current_page": 1, "total_pages": 1, "total_count": 1, "per_page": 25}
+	}`)
+}
+
+// Contract: recipes envelope key; ingredients is an array; money is a
+// string-amount object; aliases product_id/material_id and never leaks the
+// internal project_id/item_id.
+func TestRecipeListFixture_ContractCheck(t *testing.T) {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(recipeListFixture(), &raw); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := raw["recipes"]; !ok {
+		t.Fatal("envelope must use key \"recipes\"")
+	}
+	r := raw["recipes"].([]interface{})[0].(map[string]interface{})
+	if _, ok := r["product_id"]; !ok {
+		t.Error("recipe must expose product_id (alias of project_id)")
+	}
+	if _, ok := r["project_id"]; ok {
+		t.Error("recipe must not leak internal project_id")
+	}
+	ings, ok := r["ingredients"].([]interface{})
+	if !ok {
+		t.Fatalf("ingredients must be an array, got %T", r["ingredients"])
+	}
+	ing := ings[0].(map[string]interface{})
+	if _, ok := ing["material_id"]; !ok {
+		t.Error("ingredient must expose material_id (alias of item_id)")
+	}
+	if _, ok := ing["item_id"]; ok {
+		t.Error("ingredient must not leak internal item_id")
+	}
+	cost := r["total_cost"].(map[string]interface{})
+	if _, ok := cost["amount"].(string); !ok {
+		t.Errorf("money amount must be a string, got %T", cost["amount"])
+	}
+}

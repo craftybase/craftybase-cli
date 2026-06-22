@@ -13,6 +13,7 @@ The command-line interface for Craftybase
   $ craftybase products list | show               Manage products
   $ craftybase components list | show             Manage components
   $ craftybase manufactures list | show           Manage manufactures
+  $ craftybase recipes list | show                Manage recipes
   $ craftybase completion <shell>                 Generate shell completion scripts
   $ craftybase version                            Print version information
 

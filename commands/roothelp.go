@@ -48,6 +48,7 @@ var commandRows = []cmdRow{
 	{name: "products", subs: []string{"list", "show"}},
 	{name: "components", subs: []string{"list", "show"}},
 	{name: "manufactures", subs: []string{"list", "show"}},
+	{name: "recipes", subs: []string{"list", "show"}},
 	{name: "completion", args: "<shell>", desc: "Generate shell completion scripts"},
 	{name: "version"},
 }
