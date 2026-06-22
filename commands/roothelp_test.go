@@ -37,7 +37,7 @@ func TestRenderRootHelp_PlainContent(t *testing.T) {
 		"CRAFTYBASE_API_TOKEN",
 		"NO_COLOR",
 		"try: craftybase materials list",
-		"Learn more at https://craftybase.com/docs/api",
+		"Learn more at https://cli.craftybase.dev/getting-started",
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("expected output to contain %q", want)

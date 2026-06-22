@@ -27,10 +27,10 @@ builds:
       - -X main.buildDate={{.Date}}
 
 archives:
-  - format: tar.gz
+  - formats: [tar.gz]
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [zip]
     name_template: "craftybase_{{.Version}}_{{.Os}}_{{.Arch}}"
     files:
       - LICENSE
