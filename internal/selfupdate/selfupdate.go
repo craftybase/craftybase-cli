@@ -199,6 +199,39 @@ func verifyChecksum(archive, checksums []byte, archiveName string) error {
 	return nil
 }
 
+// replaceExecutable atomically replaces the binary at execPath (symlinks
+// resolved) with newBinary, staging via a temp file in the same directory so the
+// final os.Rename is atomic. A running binary is safely replaced on Unix.
+func replaceExecutable(execPath string, newBinary []byte) error {
+	real, err := filepath.EvalSymlinks(execPath)
+	if err != nil {
+		return fmt.Errorf("resolve executable path: %w", err)
+	}
+	tmp, err := os.CreateTemp(filepath.Dir(real), ".craftybase-update-*")
+	if err != nil {
+		return fmt.Errorf("create temp file: %w", err)
+	}
+	tmpName := tmp.Name()
+	if _, err := tmp.Write(newBinary); err != nil {
+		_ = tmp.Close()
+		_ = os.Remove(tmpName)
+		return fmt.Errorf("write new binary: %w", err)
+	}
+	if err := tmp.Close(); err != nil {
+		_ = os.Remove(tmpName)
+		return fmt.Errorf("close temp file: %w", err)
+	}
+	if err := os.Chmod(tmpName, 0o755); err != nil {
+		_ = os.Remove(tmpName)
+		return fmt.Errorf("chmod new binary: %w", err)
+	}
+	if err := os.Rename(tmpName, real); err != nil {
+		_ = os.Remove(tmpName)
+		return fmt.Errorf("replace binary: %w", err)
+	}
+	return nil
+}
+
 // extractBinary returns the bytes of the entry named binaryName from a gzipped tar.
 func extractBinary(archive []byte, binaryName string) ([]byte, error) {
 	gz, err := gzip.NewReader(bytes.NewReader(archive))

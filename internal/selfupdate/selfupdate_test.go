@@ -184,3 +184,50 @@ func TestExtractBinary(t *testing.T) {
 		t.Error("missing binary should error")
 	}
 }
+
+func TestReplaceExecutable(t *testing.T) {
+	dir := t.TempDir()
+	exe := filepath.Join(dir, "craftybase")
+	if err := os.WriteFile(exe, []byte("OLD"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := replaceExecutable(exe, []byte("NEW-BINARY")); err != nil {
+		t.Fatal(err)
+	}
+	got, err := os.ReadFile(exe)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != "NEW-BINARY" {
+		t.Errorf("contents = %q, want NEW-BINARY", got)
+	}
+	info, err := os.Stat(exe)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.Mode().Perm() != 0o755 {
+		t.Errorf("perm = %v, want 0755", info.Mode().Perm())
+	}
+}
+
+func TestReplaceExecutableThroughSymlink(t *testing.T) {
+	dir := t.TempDir()
+	real := filepath.Join(dir, "craftybase-real")
+	if err := os.WriteFile(real, []byte("OLD"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	link := filepath.Join(dir, "craftybase")
+	if err := os.Symlink(real, link); err != nil {
+		t.Fatal(err)
+	}
+	if err := replaceExecutable(link, []byte("NEW")); err != nil {
+		t.Fatal(err)
+	}
+	got, err := os.ReadFile(real) // the real file is replaced, link still resolves
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != "NEW" {
+		t.Errorf("real contents = %q, want NEW", got)
+	}
+}
