@@ -3,6 +3,11 @@
 package selfupdate
 
 import (
+	"archive/tar"
+	"bytes"
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -171,4 +176,52 @@ func (c *Config) get(url string) ([]byte, error) {
 		return nil, fmt.Errorf("GET %s: HTTP %d", url, resp.StatusCode)
 	}
 	return io.ReadAll(resp.Body)
+}
+
+// verifyChecksum confirms archive's SHA-256 matches its entry in a GoReleaser
+// checksums.txt body (lines of "<hex>  <filename>").
+func verifyChecksum(archive, checksums []byte, archiveName string) error {
+	var want string
+	for _, line := range strings.Split(string(checksums), "\n") {
+		fields := strings.Fields(line)
+		if len(fields) == 2 && fields[1] == archiveName {
+			want = fields[0]
+			break
+		}
+	}
+	if want == "" {
+		return fmt.Errorf("no checksum found for %s", archiveName)
+	}
+	sum := sha256.Sum256(archive)
+	if got := hex.EncodeToString(sum[:]); got != want {
+		return fmt.Errorf("checksum mismatch for %s (want %s, got %s)", archiveName, want, got)
+	}
+	return nil
+}
+
+// extractBinary returns the bytes of the entry named binaryName from a gzipped tar.
+func extractBinary(archive []byte, binaryName string) ([]byte, error) {
+	gz, err := gzip.NewReader(bytes.NewReader(archive))
+	if err != nil {
+		return nil, fmt.Errorf("gunzip archive: %w", err)
+	}
+	defer gz.Close()
+	tr := tar.NewReader(gz)
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("read archive: %w", err)
+		}
+		if filepath.Base(hdr.Name) == binaryName {
+			data, err := io.ReadAll(tr)
+			if err != nil {
+				return nil, fmt.Errorf("read %s from archive: %w", binaryName, err)
+			}
+			return data, nil
+		}
+	}
+	return nil, fmt.Errorf("archive did not contain %s", binaryName)
 }

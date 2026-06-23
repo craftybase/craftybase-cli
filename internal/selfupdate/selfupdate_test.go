@@ -1,6 +1,11 @@
 package selfupdate
 
 import (
+	"archive/tar"
+	"bytes"
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/hex"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -125,5 +130,57 @@ func TestLatestVersion(t *testing.T) {
 	}
 	if got != "v0.3.0" {
 		t.Errorf("LatestVersion = %q, want v0.3.0", got)
+	}
+}
+
+// makeTarGz returns a gzipped tar containing one file (name -> content).
+func makeTarGz(t *testing.T, name string, content []byte) []byte {
+	t.Helper()
+	var buf bytes.Buffer
+	gz := gzip.NewWriter(&buf)
+	tw := tar.NewWriter(gz)
+	hdr := &tar.Header{Name: name, Mode: 0o755, Size: int64(len(content))}
+	if err := tw.WriteHeader(hdr); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := tw.Write(content); err != nil {
+		t.Fatal(err)
+	}
+	if err := tw.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := gz.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return buf.Bytes()
+}
+
+func TestVerifyChecksum(t *testing.T) {
+	archive := []byte("fake-archive-bytes")
+	sum := sha256.Sum256(archive)
+	line := hex.EncodeToString(sum[:]) + "  craftybase_0.3.0_darwin_arm64.tar.gz\n"
+	if err := verifyChecksum(archive, []byte(line), "craftybase_0.3.0_darwin_arm64.tar.gz"); err != nil {
+		t.Errorf("matching checksum should pass: %v", err)
+	}
+	if err := verifyChecksum([]byte("tampered"), []byte(line), "craftybase_0.3.0_darwin_arm64.tar.gz"); err == nil {
+		t.Error("tampered archive should fail")
+	}
+	if err := verifyChecksum(archive, []byte(line), "missing.tar.gz"); err == nil {
+		t.Error("missing entry should fail")
+	}
+}
+
+func TestExtractBinary(t *testing.T) {
+	want := []byte("#!/bin/sh\necho hi\n")
+	archive := makeTarGz(t, "craftybase", want)
+	got, err := extractBinary(archive, "craftybase")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(got, want) {
+		t.Errorf("extracted %q, want %q", got, want)
+	}
+	if _, err := extractBinary(archive, "other"); err == nil {
+		t.Error("missing binary should error")
 	}
 }
