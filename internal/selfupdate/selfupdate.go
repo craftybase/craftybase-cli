@@ -232,6 +232,57 @@ func replaceExecutable(execPath string, newBinary []byte) error {
 	return nil
 }
 
+// Check reports current vs latest and whether an update is available. Read-only;
+// applies no guards (informational even for Homebrew/dev builds).
+func (c *Config) Check() (current, latest string, available bool, err error) {
+	latest, err = c.LatestVersion()
+	if err != nil {
+		return c.CurrentVersion, "", false, err
+	}
+	if isDevVersion(c.CurrentVersion) {
+		return c.CurrentVersion, latest, false, nil
+	}
+	return c.CurrentVersion, latest, updateAvailable(c.CurrentVersion, latest), nil
+}
+
+// Run performs a guarded in-place update to the latest release.
+func (c *Config) Run() error {
+	if err := c.guard(); err != nil {
+		return err
+	}
+	latest, err := c.LatestVersion()
+	if err != nil {
+		return err
+	}
+	if !updateAvailable(c.CurrentVersion, latest) {
+		fmt.Fprintf(c.out(), "%s is already up to date (%s)\n", c.BinaryName, c.CurrentVersion)
+		return nil
+	}
+
+	archiveName, checksumsName := c.assetNames(latest)
+	fmt.Fprintf(c.out(), "Downloading %s (%s)…\n", archiveName, latest)
+	archive, err := c.get(c.assetURL(latest, archiveName))
+	if err != nil {
+		return fmt.Errorf("download release: %w", err)
+	}
+	checksums, err := c.get(c.assetURL(latest, checksumsName))
+	if err != nil {
+		return fmt.Errorf("download checksums: %w", err)
+	}
+	if err := verifyChecksum(archive, checksums, archiveName); err != nil {
+		return err
+	}
+	bin, err := extractBinary(archive, c.BinaryName)
+	if err != nil {
+		return err
+	}
+	if err := replaceExecutable(c.ExecPath, bin); err != nil {
+		return err
+	}
+	fmt.Fprintf(c.out(), "Updated %s %s → %s\n", c.BinaryName, c.CurrentVersion, strings.TrimPrefix(latest, "v"))
+	return nil
+}
+
 // extractBinary returns the bytes of the entry named binaryName from a gzipped tar.
 func extractBinary(archive []byte, binaryName string) ([]byte, error) {
 	gz, err := gzip.NewReader(bytes.NewReader(archive))

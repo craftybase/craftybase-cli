@@ -231,3 +231,89 @@ func TestReplaceExecutableThroughSymlink(t *testing.T) {
 		t.Errorf("real contents = %q, want NEW", got)
 	}
 }
+
+// newReleaseServer serves the GitHub release endpoints for version `tag`,
+// returning an archive containing binBytes.
+func newReleaseServer(t *testing.T, tag string, archiveName, checksumsName string, archive []byte) *httptest.Server {
+	t.Helper()
+	sum := sha256.Sum256(archive)
+	checksums := hex.EncodeToString(sum[:]) + "  " + archiveName + "\n"
+	mux := http.NewServeMux()
+	mux.HandleFunc("/repos/craftybase/craftybase-cli/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"tag_name":"` + tag + `"}`))
+	})
+	mux.HandleFunc("/craftybase/craftybase-cli/releases/download/"+tag+"/"+archiveName, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write(archive)
+	})
+	mux.HandleFunc("/craftybase/craftybase-cli/releases/download/"+tag+"/"+checksumsName, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(checksums))
+	})
+	return httptest.NewServer(mux)
+}
+
+func TestRunUpdatesWhenNewer(t *testing.T) {
+	dir := t.TempDir()
+	exe := filepath.Join(dir, "craftybase")
+	if err := os.WriteFile(exe, []byte("OLD"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	archive := makeTarGz(t, "craftybase", []byte("NEW-BINARY"))
+	srv := newReleaseServer(t, "v0.3.0", "craftybase_0.3.0_darwin_arm64.tar.gz", "craftybase_0.3.0_checksums.txt", archive)
+	defer srv.Close()
+
+	var out bytes.Buffer
+	c := Config{
+		BinaryName: "craftybase", Repo: "craftybase/craftybase-cli",
+		CurrentVersion: "0.2.0", GOOS: "darwin", GOARCH: "arm64",
+		ExecPath: exe, APIBaseURL: srv.URL, DownloadBaseURL: srv.URL, Out: &out,
+	}
+	if err := c.Run(); err != nil {
+		t.Fatal(err)
+	}
+	got, _ := os.ReadFile(exe)
+	if string(got) != "NEW-BINARY" {
+		t.Errorf("binary not replaced: %q", got)
+	}
+	if !strings.Contains(out.String(), "Updated craftybase 0.2.0 → 0.3.0") {
+		t.Errorf("output = %q", out.String())
+	}
+}
+
+func TestRunNoopWhenCurrent(t *testing.T) {
+	dir := t.TempDir()
+	exe := filepath.Join(dir, "craftybase")
+	if err := os.WriteFile(exe, []byte("OLD"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	srv := newReleaseServer(t, "v0.2.0", "craftybase_0.2.0_darwin_arm64.tar.gz", "craftybase_0.2.0_checksums.txt", makeTarGz(t, "craftybase", []byte("X")))
+	defer srv.Close()
+
+	var out bytes.Buffer
+	c := Config{
+		BinaryName: "craftybase", Repo: "craftybase/craftybase-cli",
+		CurrentVersion: "0.2.0", GOOS: "darwin", GOARCH: "arm64",
+		ExecPath: exe, APIBaseURL: srv.URL, DownloadBaseURL: srv.URL, Out: &out,
+	}
+	if err := c.Run(); err != nil {
+		t.Fatal(err)
+	}
+	if got, _ := os.ReadFile(exe); string(got) != "OLD" {
+		t.Errorf("binary should be untouched, got %q", got)
+	}
+	if !strings.Contains(out.String(), "already up to date") {
+		t.Errorf("output = %q", out.String())
+	}
+}
+
+func TestCheckReportsAvailability(t *testing.T) {
+	srv := newReleaseServer(t, "v0.3.0", "a", "b", []byte("x"))
+	defer srv.Close()
+	c := Config{Repo: "craftybase/craftybase-cli", CurrentVersion: "0.2.0", APIBaseURL: srv.URL}
+	cur, latest, avail, err := c.Check()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cur != "0.2.0" || latest != "v0.3.0" || !avail {
+		t.Errorf("Check = (%q,%q,%v)", cur, latest, avail)
+	}
+}
