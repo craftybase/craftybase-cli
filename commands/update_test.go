@@ -21,6 +21,36 @@ func TestUpdate_DevBuildRefuses(t *testing.T) {
 	}
 }
 
+func TestUpdate_CheckDevBuild(t *testing.T) {
+	// cliVersion defaults to "dev" in tests; --check should report it as a dev build.
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"tag_name":"v9.9.9"}`))
+	}))
+	defer srv.Close()
+
+	updateAPIBaseURL = srv.URL
+	t.Cleanup(func() {
+		updateAPIBaseURL = ""
+		updateCheckOnly = false
+		rootCmd.SetOut(nil)
+		rootCmd.SetArgs(nil)
+	})
+
+	var buf bytes.Buffer
+	rootCmd.SetOut(&buf)
+	rootCmd.SetArgs([]string{"update", "--check"})
+	if err := rootCmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	out := buf.String()
+	if !strings.Contains(out, "dev build") {
+		t.Errorf("--check dev build output missing 'dev build': %q", out)
+	}
+	if !strings.Contains(out, "v9.9.9") {
+		t.Errorf("--check dev build output missing latest version 'v9.9.9': %q", out)
+	}
+}
+
 func TestUpdate_CheckReportsAvailable(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(`{"tag_name":"v9.9.9"}`))

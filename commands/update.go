@@ -51,10 +51,13 @@ and atomically replaces the running binary. Homebrew installs should use
 			if err != nil {
 				return err
 			}
-			if available {
+			switch {
+			case selfupdate.IsDevVersion(current):
+				fmt.Fprintf(cmd.OutOrStdout(), "%s is a dev build (no released version to compare); latest release is %s\n", brand.BinaryName, latest)
+			case available:
 				fmt.Fprintf(cmd.OutOrStdout(), "%s %s is available (current: %s). Run '%s update' to upgrade.\n",
 					brand.BinaryName, latest, current, brand.BinaryName)
-			} else {
+			default:
 				fmt.Fprintf(cmd.OutOrStdout(), "%s is up to date (current: %s, latest: %s)\n",
 					brand.BinaryName, current, latest)
 			}

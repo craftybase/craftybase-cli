@@ -27,13 +27,13 @@ func TestAssetNames(t *testing.T) {
 
 func TestIsDevVersion(t *testing.T) {
 	for _, v := range []string{"", "dev", "garbage", "none"} {
-		if !isDevVersion(v) {
-			t.Errorf("isDevVersion(%q) = false, want true", v)
+		if !IsDevVersion(v) {
+			t.Errorf("IsDevVersion(%q) = false, want true", v)
 		}
 	}
 	for _, v := range []string{"0.2.0", "v0.2.0", "1.0.0-rc1"} {
-		if isDevVersion(v) {
-			t.Errorf("isDevVersion(%q) = true, want false", v)
+		if IsDevVersion(v) {
+			t.Errorf("IsDevVersion(%q) = true, want false", v)
 		}
 	}
 }
@@ -114,7 +114,14 @@ func TestGuardPassesForWritableLocalBin(t *testing.T) {
 }
 
 func TestLatestVersion(t *testing.T) {
+	var gotUA string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ua := r.Header.Get("User-Agent")
+		if ua == "" {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		gotUA = ua
 		if r.URL.Path == "/repos/craftybase/craftybase-cli/releases/latest" {
 			_, _ = w.Write([]byte(`{"tag_name":"v0.3.0"}`))
 			return
@@ -123,13 +130,16 @@ func TestLatestVersion(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	c := Config{Repo: "craftybase/craftybase-cli", APIBaseURL: srv.URL}
+	c := Config{BinaryName: "craftybase", CurrentVersion: "0.3.0", Repo: "craftybase/craftybase-cli", APIBaseURL: srv.URL}
 	got, err := c.LatestVersion()
 	if err != nil {
 		t.Fatal(err)
 	}
 	if got != "v0.3.0" {
 		t.Errorf("LatestVersion = %q, want v0.3.0", got)
+	}
+	if gotUA == "" {
+		t.Error("User-Agent header was not sent")
 	}
 }
 

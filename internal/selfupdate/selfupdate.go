@@ -89,8 +89,8 @@ func canonicalVersion(v string) string {
 	return v
 }
 
-// isDevVersion reports whether v cannot be compared against released tags.
-func isDevVersion(v string) bool {
+// IsDevVersion reports whether v cannot be compared against released tags.
+func IsDevVersion(v string) bool {
 	return !semver.IsValid(canonicalVersion(v))
 }
 
@@ -101,7 +101,7 @@ func updateAvailable(current, latest string) bool {
 
 // guard returns a refusal error when the running binary must not self-update.
 func (c *Config) guard() error {
-	if isDevVersion(c.CurrentVersion) {
+	if IsDevVersion(c.CurrentVersion) {
 		cur := c.CurrentVersion
 		if cur == "" {
 			cur = "unknown"
@@ -130,6 +130,8 @@ func isBrewPath(realPath string) bool {
 }
 
 // checkWritable verifies dir can be written by creating and removing a temp file.
+// This is a best-effort pre-flight probe; the real safety guarantee comes from the
+// atomic rename in replaceExecutable, so the TOCTOU window here is acceptable.
 func checkWritable(dir string) error {
 	f, err := os.CreateTemp(dir, ".update-write-test-*")
 	if err != nil {
@@ -167,7 +169,12 @@ func (c *Config) assetURL(version, name string) string {
 
 // get fetches url, returning the body and treating non-2xx as an error.
 func (c *Config) get(url string) ([]byte, error) {
-	resp, err := c.httpClient().Get(url)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", c.BinaryName+"/"+c.CurrentVersion)
+	resp, err := c.httpClient().Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +246,7 @@ func (c *Config) Check() (current, latest string, available bool, err error) {
 	if err != nil {
 		return c.CurrentVersion, "", false, err
 	}
-	if isDevVersion(c.CurrentVersion) {
+	if IsDevVersion(c.CurrentVersion) {
 		return c.CurrentVersion, latest, false, nil
 	}
 	return c.CurrentVersion, latest, updateAvailable(c.CurrentVersion, latest), nil
@@ -299,7 +306,7 @@ func extractBinary(archive []byte, binaryName string) ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("read archive: %w", err)
 		}
-		if filepath.Base(hdr.Name) == binaryName {
+		if hdr.Typeflag == tar.TypeReg && filepath.Base(hdr.Name) == binaryName {
 			data, err := io.ReadAll(tr)
 			if err != nil {
 				return nil, fmt.Errorf("read %s from archive: %w", binaryName, err)
