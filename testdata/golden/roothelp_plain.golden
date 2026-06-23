@@ -14,6 +14,7 @@ The command-line interface for Craftybase
   $ craftybase components list | show             Manage components
   $ craftybase manufactures list | show           Manage manufactures
   $ craftybase recipes list | show                Manage recipes
+  $ craftybase expenses list | show               Manage expenses
   $ craftybase completion <shell>                 Generate shell completion scripts
   $ craftybase version                            Print version information
 
