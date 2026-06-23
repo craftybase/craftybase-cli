@@ -1,6 +1,8 @@
 package selfupdate
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
@@ -103,5 +105,25 @@ func TestGuardPassesForWritableLocalBin(t *testing.T) {
 	c := Config{BinaryName: "craftybase", CurrentVersion: "0.2.0", GOOS: "darwin", ExecPath: exe}
 	if err := c.guard(); err != nil {
 		t.Errorf("guard should pass, got %v", err)
+	}
+}
+
+func TestLatestVersion(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/repos/craftybase/craftybase-cli/releases/latest" {
+			_, _ = w.Write([]byte(`{"tag_name":"v0.3.0"}`))
+			return
+		}
+		http.NotFound(w, r)
+	}))
+	defer srv.Close()
+
+	c := Config{Repo: "craftybase/craftybase-cli", APIBaseURL: srv.URL}
+	got, err := c.LatestVersion()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != "v0.3.0" {
+		t.Errorf("LatestVersion = %q, want v0.3.0", got)
 	}
 }

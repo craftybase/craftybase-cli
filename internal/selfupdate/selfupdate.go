@@ -3,6 +3,7 @@
 package selfupdate
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -48,10 +49,10 @@ func (c *Config) downloadBase() string {
 }
 
 func (c *Config) httpClient() *http.Client {
-	if c.HTTPClient != nil {
-		return c.HTTPClient
+	if c.HTTPClient == nil {
+		c.HTTPClient = &http.Client{Timeout: 30 * time.Second}
 	}
-	return &http.Client{Timeout: 30 * time.Second}
+	return c.HTTPClient
 }
 
 func (c *Config) out() io.Writer {
@@ -133,4 +134,41 @@ func checkWritable(dir string) error {
 	_ = f.Close()
 	_ = os.Remove(name)
 	return nil
+}
+
+// LatestVersion returns the newest release tag (e.g. "v0.3.0").
+func (c *Config) LatestVersion() (string, error) {
+	url := fmt.Sprintf("%s/repos/%s/releases/latest", c.apiBase(), c.Repo)
+	body, err := c.get(url)
+	if err != nil {
+		return "", fmt.Errorf("fetch latest release: %w", err)
+	}
+	var rel struct {
+		TagName string `json:"tag_name"`
+	}
+	if err := json.Unmarshal(body, &rel); err != nil {
+		return "", fmt.Errorf("parse latest release: %w", err)
+	}
+	if rel.TagName == "" {
+		return "", fmt.Errorf("could not determine latest version")
+	}
+	return rel.TagName, nil
+}
+
+// assetURL builds a release download URL.
+func (c *Config) assetURL(version, name string) string {
+	return fmt.Sprintf("%s/%s/releases/download/%s/%s", c.downloadBase(), c.Repo, version, name)
+}
+
+// get fetches url, returning the body and treating non-2xx as an error.
+func (c *Config) get(url string) ([]byte, error) {
+	resp, err := c.httpClient().Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("GET %s: HTTP %d", url, resp.StatusCode)
+	}
+	return io.ReadAll(resp.Body)
 }
