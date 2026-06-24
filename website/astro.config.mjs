@@ -20,6 +20,7 @@ export default defineConfig({
       ],
       sidebar: [
         { label: 'Getting Started', slug: 'getting-started' },
+        { label: 'Updating', slug: 'updating' },
         { label: 'Authentication', slug: 'authentication' },
         { label: 'Output Formats', slug: 'output-formats' },
         { label: 'Configuration', slug: 'configuration' },

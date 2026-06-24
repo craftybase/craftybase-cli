@@ -13,4 +13,5 @@ const (
 	UserAgentProduct = "craftybase-cli"
 	HomebrewTap      = "craftybase/tap/craftybase"
 	InstallScriptURL = "https://cli.craftybase.dev/install"
+	GitHubRepo       = "craftybase/craftybase-cli"
 )

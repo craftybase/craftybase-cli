@@ -43,5 +43,6 @@ craftybase [flags]
 * [craftybase materials](/reference/craftybase_materials/)	 - Manage materials
 * [craftybase products](/reference/craftybase_products/)	 - Manage products
 * [craftybase recipes](/reference/craftybase_recipes/)	 - Manage recipes
+* [craftybase update](/reference/craftybase_update/)	 - Update craftybase to the latest release
 * [craftybase version](/reference/craftybase_version/)	 - Print version information
 

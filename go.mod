@@ -7,6 +7,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.4.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.9
+	golang.org/x/mod v0.37.0
 	golang.org/x/term v0.44.0
 )
 
