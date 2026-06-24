@@ -87,8 +87,9 @@ func nameOrID(name string, id int) string {
 	return strconv.Itoa(id)
 }
 
-// variationRef renders a nullable variation reference: name, else id, else "—".
-func variationRef(name string, id *int) string {
+// refOrDash renders a nullable reference: name, else id, else "—". Shared by
+// recipes (variation) and expenses (supplier, material, category).
+func refOrDash(name string, id *int) string {
 	if name != "" {
 		return name
 	}
@@ -117,7 +118,7 @@ func recipeToRow(r *Recipe) []string {
 		strconv.Itoa(r.ID),
 		nameOrID(r.ProductName, r.ProductID),
 		dashIfEmpty(r.Name),
-		variationRef(r.VariationName, r.VariationID),
+		refOrDash(r.VariationName, r.VariationID),
 		dashIfEmpty(r.ManufactureBatchQuantity),
 		strconv.Itoa(len(r.Ingredients)),
 		output.FormatMoney(r.UnitCost),
@@ -139,7 +140,7 @@ func renderRecipeShow(w io.Writer, raw json.RawMessage, useColor bool) error {
 	output.FormatKeyValue(w, [][2]string{
 		{"ID", strconv.Itoa(r.ID)},
 		{"PRODUCT", nameOrID(r.ProductName, r.ProductID)},
-		{"VARIATION", variationRef(r.VariationName, r.VariationID)},
+		{"VARIATION", refOrDash(r.VariationName, r.VariationID)},
 		{"NAME", dashIfEmpty(r.Name)},
 		{"BATCH QTY", dashIfEmpty(r.ManufactureBatchQuantity)},
 		{"MINUTES", strconv.Itoa(r.ManufactureMinutes)},

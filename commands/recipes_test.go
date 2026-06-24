@@ -36,15 +36,15 @@ func TestNameOrID(t *testing.T) {
 	}
 }
 
-func TestVariationRef(t *testing.T) {
+func TestRefOrDash(t *testing.T) {
 	id := 3
-	if got := variationRef("Small", &id); got != "Small" {
+	if got := refOrDash("Small", &id); got != "Small" {
 		t.Errorf("want name, got %q", got)
 	}
-	if got := variationRef("", &id); got != "3" {
+	if got := refOrDash("", &id); got != "3" {
 		t.Errorf("empty name should fall back to id, got %q", got)
 	}
-	if got := variationRef("", nil); got != "—" {
+	if got := refOrDash("", nil); got != "—" {
 		t.Errorf("nil id should render —, got %q", got)
 	}
 }

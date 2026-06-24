@@ -230,3 +230,54 @@ func TestRecipeListFixture_ContractCheck(t *testing.T) {
 		t.Errorf("money amount must be a string, got %T", cost["amount"])
 	}
 }
+
+func expenseListFixture() []byte {
+	return []byte(`{
+		"expenses": [
+			{"id": 88, "code": "EXP-001A", "purchased_at": "2026-05-14T09:00:00Z",
+			 "supplier_id": 12, "supplier_name": "Candle Supply Co.", "paid": true, "received": true,
+			 "amount": {"amount": "312.50", "currency_code": "USD"},
+			 "line_items": [{"id": 401, "material_id": 5, "material_name": "Soy Wax",
+			   "material_expense": true, "category_id": 3, "category_name": "Raw Materials",
+			   "quantity": "50.0", "unit_price": {"amount": "4.00", "currency_code": "USD"},
+			   "total_price": {"amount": "200.00", "currency_code": "USD"}}]}
+		],
+		"meta": {"current_page": 1, "total_pages": 1, "total_count": 1, "per_page": 25}
+	}`)
+}
+
+// Contract: expenses envelope key; line_items array; money string-amount; aliases
+// supplier_id/material_id and never leaks contact_id/item_id/project_id.
+func TestExpenseListFixture_ContractCheck(t *testing.T) {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(expenseListFixture(), &raw); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := raw["expenses"]; !ok {
+		t.Fatal("envelope must use key \"expenses\"")
+	}
+	e := raw["expenses"].([]interface{})[0].(map[string]interface{})
+	if _, ok := e["supplier_id"]; !ok {
+		t.Error("expense must expose supplier_id (alias of contact_id)")
+	}
+	for _, leak := range []string{"contact_id", "project_id"} {
+		if _, ok := e[leak]; ok {
+			t.Errorf("expense must not leak internal key %q", leak)
+		}
+	}
+	cost := e["amount"].(map[string]interface{})
+	if _, ok := cost["amount"].(string); !ok {
+		t.Errorf("money amount must be a string, got %T", cost["amount"])
+	}
+	lines, ok := e["line_items"].([]interface{})
+	if !ok {
+		t.Fatalf("line_items must be an array, got %T", e["line_items"])
+	}
+	li := lines[0].(map[string]interface{})
+	if _, ok := li["material_id"]; !ok {
+		t.Error("line item must expose material_id (alias of item_id)")
+	}
+	if _, ok := li["item_id"]; ok {
+		t.Error("line item must not leak internal item_id")
+	}
+}

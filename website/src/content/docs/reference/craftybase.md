@@ -38,6 +38,7 @@ craftybase [flags]
 * [craftybase auth](/reference/craftybase_auth/)	 - Manage authentication credentials
 * [craftybase completion](/reference/craftybase_completion/)	 - Generate shell completion scripts
 * [craftybase components](/reference/craftybase_components/)	 - Manage components
+* [craftybase expenses](/reference/craftybase_expenses/)	 - Manage expenses
 * [craftybase manufactures](/reference/craftybase_manufactures/)	 - Manage manufactures
 * [craftybase materials](/reference/craftybase_materials/)	 - Manage materials
 * [craftybase products](/reference/craftybase_products/)	 - Manage products
