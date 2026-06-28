@@ -22,7 +22,7 @@ stocksmith [flags]
 ### Options
 
 ```
-      --api-url string   API base URL (default: https://api.stocksmith.dev)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
   -h, --help             help for stocksmith
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream

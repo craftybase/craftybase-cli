@@ -39,7 +39,7 @@ stocksmith completion [bash|zsh|fish|powershell]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.stocksmith.dev)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output

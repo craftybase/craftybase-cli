@@ -8,7 +8,7 @@ const (
 	EnvAPIURL        = "STOCKSMITH_API_URL"
 	ConfigDir        = ".stocksmith"
 	ConfigFile       = "config.toml"
-	DefaultAPIURL    = "https://api.stocksmith.dev"
+	DefaultAPIURL    = "https://api.stocksmith.io"
 	DocsURL          = "https://cli.stocksmith.dev/getting-started"
 	UserAgentProduct = "stocksmith-cli"
 	HomebrewTap      = "craftybase/tap/stocksmith"

@@ -9,7 +9,7 @@ Credentials live in `~/.stocksmith/config.toml`, keyed by profile (`profiles.def
 
 ## API URL
 
-The API base URL is resolved as: `--api-url` flag → `STOCKSMITH_API_URL` env → stored profile → default (`https://api.stocksmith.dev`).
+The API base URL is resolved as: `--api-url` flag → `STOCKSMITH_API_URL` env → stored profile → default (`https://api.stocksmith.io`).
 
 ## Global flags
 
