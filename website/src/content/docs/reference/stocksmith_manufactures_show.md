@@ -1,26 +1,26 @@
 ---
-title: "craftybase auth logout"
-description: "Reference for the craftybase auth logout command."
+title: "stocksmith manufactures show"
+description: "Reference for the stocksmith manufactures show command."
 ---
 
-## craftybase auth logout
+## stocksmith manufactures show
 
-Remove stored credentials
+Show a single manufacture
 
 ```
-craftybase auth logout [flags]
+stocksmith manufactures show <id> [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for logout
+  -h, --help   help for show
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -30,5 +30,5 @@ craftybase auth logout [flags]
 
 ### SEE ALSO
 
-* [craftybase auth](/reference/craftybase_auth/)	 - Manage authentication credentials
+* [stocksmith manufactures](/reference/stocksmith_manufactures/)	 - Manage manufactures
 

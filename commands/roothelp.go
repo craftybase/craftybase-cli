@@ -8,19 +8,21 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/brand"
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
-// rootLogo is the flat-teal CRAFTYBASE wordmark (48x3). Raw segments are joined
-// around literal backticks so backslashes stay literal.
+// rootLogo is the flat-teal STOCKSMITH wordmark. Raw segments are joined around
+// the one literal backtick (in the lowercase "m") so the backslashes stay literal.
 //
 // NOTE: this art literally spells the product name, so — unlike the other
 // brand-bearing strings, which route through internal/brand — it cannot be
-// centralized. Regenerate it as part of the planned Stocksmith rebrand.
-const rootLogo = ` __   __        ___ ___      __        __   ___
-/  ` + "`" + ` |__)  /\  |__   |  \ / |__)  /\  /__` + "`" + ` |__
-\__, |  \ /~~\ |     |   |  |__) /~~\ .__/ |___ `
+// centralized. Regenerate it if the product is ever rebranded again.
+const rootLogo = `      _             _                  _ _   _
+  ___| |_ ___   ___| | _____ _ __ ___ (_) |_| |__
+ / __| __/ _ \ / __| |/ / __| '_ ` + "`" + ` _ \| | __| '_ \
+ \__ \ || (_) | (__|   <\__ \ | | | | | | |_| | | |
+ |___/\__\___/ \___|_|\_\___/_| |_| |_|_|\__|_| |_|`
 
 const (
 	tagline    = "The command-line interface for " + brand.ProductName

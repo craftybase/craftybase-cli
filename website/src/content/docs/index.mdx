@@ -1,15 +1,15 @@
 ---
-title: Craftybase CLI
-description: The command-line interface for Craftybase — manage your inventory from the terminal.
+title: Stocksmith CLI
+description: The command-line interface for Stocksmith — manage your inventory from the terminal.
 template: splash
 hero:
-  tagline: Manage your Craftybase inventory from the terminal. Built for humans and agents.
+  tagline: Manage your Stocksmith inventory from the terminal. Built for humans and agents.
   actions:
     - text: Get started
       link: /getting-started/
       icon: right-arrow
     - text: View on GitHub
-      link: https://github.com/craftybase/craftybase-cli
+      link: https://github.com/craftybase/stocksmith-cli
       icon: external
       variant: minimal
 ---
@@ -19,23 +19,23 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 ## Install
 
 ```sh
-curl -fsSL https://cli.craftybase.dev/install | bash
+curl -fsSL https://cli.stocksmith.dev/install | bash
 ```
 
 With Homebrew:
 
 ```sh
-brew install craftybase/tap/craftybase
+brew install craftybase/tap/stocksmith
 ```
 
 With Go:
 
 ```sh
-go install github.com/craftybase/craftybase-cli/cmd/craftybase@latest
+go install github.com/craftybase/stocksmith-cli/cmd/stocksmith@latest
 ```
 
 <CardGrid>
   <Card title="Human-friendly" icon="laptop">Readable tables, color, and branded help out of the box.</Card>
   <Card title="Agent-friendly" icon="seti:json">`--json` and `--ndjson` for pipelines, scripts, and tools.</Card>
-  <Card title="Authenticate once" icon="approve-check">`craftybase auth login`, then your token is stored locally.</Card>
+  <Card title="Authenticate once" icon="approve-check">`stocksmith auth login`, then your token is stored locally.</Card>
 </CardGrid>

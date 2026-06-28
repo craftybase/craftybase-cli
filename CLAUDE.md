@@ -2,13 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-`craftybase` is a Go CLI for the Craftybase Public API. Module path: `github.com/craftybase/craftybase-cli` (Go 1.26).
+`stocksmith` is a Go CLI for the Stocksmith Public API. Module path: `github.com/craftybase/stocksmith-cli` (Go 1.26).
 
 ## Commands
 
 ```bash
-go build -o craftybase ./cmd/craftybase   # build the binary (gitignored)
-go run ./cmd/craftybase materials list     # run without building
+go build -o stocksmith ./cmd/stocksmith   # build the binary (gitignored)
+go run ./cmd/stocksmith materials list     # run without building
 go test ./...                              # all tests
 go test ./... -v -race                     # tests as CI runs them
 go test ./commands -run TestRenderRootHelp_PlainContent   # single test
@@ -22,7 +22,7 @@ CI (`.github/workflows/ci.yml`) runs `go test ./... -v -race`, `go vet ./...`, a
 
 Three layers:
 
-- **`cmd/craftybase/main.go`** — tiny entry point. Receives ldflag-injected version vars, calls `commands.SetVersion(...)` then `commands.Execute(...)`.
+- **`cmd/stocksmith/main.go`** — tiny entry point. Receives ldflag-injected version vars, calls `commands.SetVersion(...)` then `commands.Execute(...)`.
 - **`commands/`** (package `commands`) — Cobra command definitions, one file per command group (`root`, `auth`, `account`, `api`, `materials`, `version`, `completion`, `roothelp`). Each registers itself onto the shared `rootCmd` in its own `init()`.
 - **`internal/`** — reusable libraries: `brand`, `config`, `api`, `output`.
 
@@ -37,11 +37,11 @@ Every command that hits the API follows the same shape — match it:
 
 ### Key conventions (the non-obvious parts)
 
-- **Brand constants are centralized in `internal/brand`.** Do not hardcode `"craftybase"`, the config path, env var names, or the default API URL — reference `brand.BinaryName`, `brand.ConfigDir`, `brand.EnvTokenName`, `brand.DefaultAPIURL`, etc. The codebase is deliberately white-label capable.
+- **Brand constants are centralized in `internal/brand`.** Do not hardcode `"stocksmith"`, the config path, env var names, or the default API URL — reference `brand.BinaryName`, `brand.ConfigDir`, `brand.EnvTokenName`, `brand.DefaultAPIURL`, etc. The codebase is deliberately white-label capable.
 - **API responses are enveloped**, e.g. `{"account": {...}}` and `{"materials": [...], "meta": {...}}`. Unmarshal into an anonymous struct keyed by the envelope name; `--json` prints the full envelope, table mode extracts the inner object(s).
 - **Money is a string pair**, `{"amount": "8.75", "currency_code": "USD"}` — never a float. Use `output.Money` / `output.FormatMoney`. There are "contract check" tests asserting fixtures keep this shape (and that `category` stays a flat string).
 - **Output-mode flags are global persistent flags** on `rootCmd` (`--json`, `--ndjson`, `--no-color`, `--verbose`, `--token`, `--api-url`), read directly as package-level `flag*` vars. `--json`/`--ndjson` are mutually exclusive (enforced in `PersistentPreRunE`).
-- **Token / API-URL resolution precedence** (in `internal/config`): flag → env var (`CRAFTYBASE_API_TOKEN` / `CRAFTYBASE_API_URL`) → stored profile → default. Config is TOML at `~/.craftybase/config.toml`, profile-keyed (`profiles.default`), written atomically (temp file + rename) with enforced `0600` perms.
+- **Token / API-URL resolution precedence** (in `internal/config`): flag → env var (`STOCKSMITH_API_TOKEN` / `STOCKSMITH_API_URL`) → stored profile → default. Config is TOML at `~/.stocksmith/config.toml`, profile-keyed (`profiles.default`), written atomically (temp file + rename) with enforced `0600` perms.
 - **Errors return `*api.APIError` from `RunE`.** `Execute()` maps status codes to process exit codes via `api.ExitCode` (401→3, 404→4, others→1). `rootCmd` sets `SilenceUsage`/`SilenceErrors` so Cobra does not double-print; `Execute` prints the error itself.
 - **Color/TTY**: gate any styled output on `output.ColorEnabled(flagNoColor)`, which honors `--no-color`, `NO_COLOR`, and non-TTY stdout. `output.Styler` renders 24-bit truecolor with an automatic 256-color fallback; the brand palette lives in `internal/output/style.go`.
 - **Pagination**: `--all` and `--ndjson` use `api.WalkPages`, which reads `meta.total_pages` from page 1 and walks the rest with per-page retry/backoff. `--all` is mutually exclusive with both `--ndjson` and `--page`.

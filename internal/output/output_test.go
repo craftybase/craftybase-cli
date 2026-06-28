@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 var ansiRE = regexp.MustCompile("\x1b\\[[0-9;]*m")

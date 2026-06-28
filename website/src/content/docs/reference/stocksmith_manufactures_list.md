@@ -1,21 +1,21 @@
 ---
-title: "craftybase manufactures list"
-description: "Reference for the craftybase manufactures list command."
+title: "stocksmith manufactures list"
+description: "Reference for the stocksmith manufactures list command."
 ---
 
-## craftybase manufactures list
+## stocksmith manufactures list
 
 List manufactures
 
 ### Synopsis
 
-List production runs (manufactures) from your Craftybase account.
+List production runs (manufactures) from your Stocksmith account.
 
 Filter by product, status, or start-date range. Use --all to fetch all
 pages, or --ndjson for streaming NDJSON output suitable for data pipelines.
 
 ```
-craftybase manufactures list [flags]
+stocksmith manufactures list [flags]
 ```
 
 ### Options
@@ -34,7 +34,7 @@ craftybase manufactures list [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -44,5 +44,5 @@ craftybase manufactures list [flags]
 
 ### SEE ALSO
 
-* [craftybase manufactures](/reference/craftybase_manufactures/)	 - Manage manufactures
+* [stocksmith manufactures](/reference/stocksmith_manufactures/)	 - Manage manufactures
 

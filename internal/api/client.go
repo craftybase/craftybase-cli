@@ -10,6 +10,8 @@ import (
 	"runtime"
 	"strconv"
 	"time"
+
+	"github.com/craftybase/stocksmith-cli/internal/brand"
 )
 
 type Client struct {
@@ -36,7 +38,7 @@ func (c *Client) userAgent() string {
 	if v == "" {
 		v = "dev"
 	}
-	return fmt.Sprintf("%s/%s (%s; %s)", "craftybase-cli", v, runtime.GOOS, runtime.GOARCH)
+	return fmt.Sprintf("%s/%s (%s; %s)", brand.UserAgentProduct, v, runtime.GOOS, runtime.GOARCH)
 }
 
 func (c *Client) Do(req *http.Request) (*http.Response, error) {

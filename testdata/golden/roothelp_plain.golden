@@ -1,23 +1,25 @@
 
- __   __        ___ ___      __        __   ___
-/  ` |__)  /\  |__   |  \ / |__)  /\  /__` |__
-\__, |  \ /~~\ |     |   |  |__) /~~\ .__/ |___ 
+      _             _                  _ _   _
+  ___| |_ ___   ___| | _____ _ __ ___ (_) |_| |__
+ / __| __/ _ \ / __| |/ / __| '_ ` _ \| | __| '_ \
+ \__ \ || (_) | (__|   <\__ \ | | | | | | |_| | | |
+ |___/\__\___/ \___|_|\_\___/_| |_| |_|_|\__|_| |_|
 
-The command-line interface for Craftybase
+The command-line interface for Stocksmith
 
-  $ craftybase help <command>                     Display help for a command
-  $ craftybase account                            Show account information
-  $ craftybase api <METHOD> <path>                Make authenticated API requests
-  $ craftybase auth login | status | logout       Authenticate with Craftybase
-  $ craftybase materials list | show              Manage materials
-  $ craftybase products list | show               Manage products
-  $ craftybase components list | show             Manage components
-  $ craftybase manufactures list | show           Manage manufactures
-  $ craftybase recipes list | show                Manage recipes
-  $ craftybase expenses list | show               Manage expenses
-  $ craftybase completion <shell>                 Generate shell completion scripts
-  $ craftybase version                            Print version information
-  $ craftybase update                             Update craftybase to the latest release
+  $ stocksmith help <command>                     Display help for a command
+  $ stocksmith account                            Show account information
+  $ stocksmith api <METHOD> <path>                Make authenticated API requests
+  $ stocksmith auth login | status | logout       Authenticate with Stocksmith
+  $ stocksmith materials list | show              Manage materials
+  $ stocksmith products list | show               Manage products
+  $ stocksmith components list | show             Manage components
+  $ stocksmith manufactures list | show           Manage manufactures
+  $ stocksmith recipes list | show                Manage recipes
+  $ stocksmith expenses list | show               Manage expenses
+  $ stocksmith completion <shell>                 Generate shell completion scripts
+  $ stocksmith version                            Print version information
+  $ stocksmith update                             Update stocksmith to the latest release
 
 Flags:
       --json           Output raw API envelope (pretty-printed JSON)
@@ -29,10 +31,10 @@ Flags:
   -h, --help           Show help for a command
 
 Environment Variables:
-  CRAFTYBASE_API_TOKEN  API token used for requests (CI, scripts)
-  CRAFTYBASE_API_URL    API base URL override
+  STOCKSMITH_API_TOKEN  API token used for requests (CI, scripts)
+  STOCKSMITH_API_URL    API base URL override
   NO_COLOR              Disable colored output (no-color.org convention)
 
-try: craftybase materials list
+try: stocksmith materials list
 
-Learn more at https://cli.craftybase.dev/getting-started
+Learn more at https://cli.stocksmith.dev/getting-started

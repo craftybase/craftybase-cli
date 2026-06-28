@@ -11,9 +11,9 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
-	"github.com/craftybase/craftybase-cli/internal/api"
-	"github.com/craftybase/craftybase-cli/internal/brand"
-	"github.com/craftybase/craftybase-cli/internal/config"
+	"github.com/craftybase/stocksmith-cli/internal/api"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/config"
 )
 
 var authCmd = &cobra.Command{
@@ -25,15 +25,13 @@ var authLoginToken string
 
 var authLoginCmd = &cobra.Command{
 	Use:   "login",
-	Short: "Authenticate with the Craftybase API",
-	Long: `Authenticate with the Craftybase API using an API key.
-
-The key can be provided via:
-  - --token flag
-  - stdin (when piped)
-  - interactive prompt (when run in a terminal)
-
-On success, credentials are saved to ~/.craftybase/config.toml.`,
+	Short: "Authenticate with the " + brand.ProductName + " API",
+	Long: "Authenticate with the " + brand.ProductName + " API using an API key.\n\n" +
+		"The key can be provided via:\n" +
+		"  - --token flag\n" +
+		"  - stdin (when piped)\n" +
+		"  - interactive prompt (when run in a terminal)\n\n" +
+		"On success, credentials are saved to ~/" + brand.ConfigDir + "/" + brand.ConfigFile + ".",
 	RunE: runAuthLogin,
 }
 
@@ -51,7 +49,7 @@ func runAuthLogin(cmd *cobra.Command, args []string) error {
 		}
 		token = strings.TrimSpace(string(data))
 	} else {
-		fmt.Fprint(os.Stderr, "Paste your Craftybase API key (input hidden): ")
+		fmt.Fprint(os.Stderr, "Paste your "+brand.ProductName+" API key (input hidden): ")
 		raw, err := term.ReadPassword(int(os.Stdin.Fd()))
 		fmt.Fprintln(os.Stderr)
 		if err != nil {
@@ -136,7 +134,7 @@ func runAuthStatus(cmd *cobra.Command, args []string) error {
 	if token == "" {
 		return &api.APIError{
 			StatusCode: 401,
-			Message:    "Not authenticated — run 'craftybase auth login'.",
+			Message:    "Not authenticated — run '" + brand.BinaryName + " auth login'.",
 		}
 	}
 
@@ -193,7 +191,7 @@ func runAuthStatus(cmd *cobra.Command, args []string) error {
 	}
 
 	if profile.AccountID > 0 && pingResp.AccountID > 0 && profile.AccountID != pingResp.AccountID {
-		fmt.Fprintf(os.Stderr, "Warning: account ID mismatch — re-run 'craftybase auth login' to refresh cached credentials.\n")
+		fmt.Fprintf(os.Stderr, "Warning: account ID mismatch — re-run '%s auth login' to refresh cached credentials.\n", brand.BinaryName)
 	}
 
 	maskedKey := maskToken(token)

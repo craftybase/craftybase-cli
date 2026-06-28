@@ -1,30 +1,30 @@
 ---
-title: "craftybase account"
-description: "Reference for the craftybase account command."
+title: "stocksmith version"
+description: "Reference for the stocksmith version command."
 ---
 
-## craftybase account
+## stocksmith version
 
-Show account information
+Print version information
 
 ### Synopsis
 
-Display account details including name, currency, time zone, and plan.
+Print the stocksmith CLI version, commit, build date, and platform.
 
 ```
-craftybase account [flags]
+stocksmith version [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for account
+  -h, --help   help for version
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -34,5 +34,5 @@ craftybase account [flags]
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
 

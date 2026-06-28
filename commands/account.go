@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 var accountCmd = &cobra.Command{

@@ -1,14 +1,14 @@
 ---
-title: "craftybase auth status"
-description: "Reference for the craftybase auth status command."
+title: "stocksmith auth status"
+description: "Reference for the stocksmith auth status command."
 ---
 
-## craftybase auth status
+## stocksmith auth status
 
 Show current authentication status
 
 ```
-craftybase auth status [flags]
+stocksmith auth status [flags]
 ```
 
 ### Options
@@ -20,7 +20,7 @@ craftybase auth status [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -30,5 +30,5 @@ craftybase auth status [flags]
 
 ### SEE ALSO
 
-* [craftybase auth](/reference/craftybase_auth/)	 - Manage authentication credentials
+* [stocksmith auth](/reference/stocksmith_auth/)	 - Manage authentication credentials
 

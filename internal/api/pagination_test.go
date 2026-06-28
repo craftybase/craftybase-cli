@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/craftybase/craftybase-cli/internal/api"
+	"github.com/craftybase/stocksmith-cli/internal/api"
 )
 
 func TestRawPageMeta_ParsesCurrentPage(t *testing.T) {

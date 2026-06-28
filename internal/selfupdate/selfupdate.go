@@ -214,7 +214,7 @@ func replaceExecutable(execPath string, newBinary []byte) error {
 	if err != nil {
 		return fmt.Errorf("resolve executable path: %w", err)
 	}
-	tmp, err := os.CreateTemp(filepath.Dir(real), ".craftybase-update-*")
+	tmp, err := os.CreateTemp(filepath.Dir(real), "."+filepath.Base(real)+"-update-*")
 	if err != nil {
 		return fmt.Errorf("create temp file: %w", err)
 	}

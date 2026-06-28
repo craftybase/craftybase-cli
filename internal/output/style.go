@@ -8,7 +8,7 @@ import (
 // RGB is a 24-bit color.
 type RGB struct{ R, G, B uint8 }
 
-// Craftybase brand palette.
+// Stocksmith brand palette.
 var (
 	TealBright = RGB{62, 177, 193}  // #3EB1C1
 	TealLight  = RGB{101, 193, 205} // #65C1CD

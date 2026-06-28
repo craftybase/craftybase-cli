@@ -5,9 +5,9 @@ before:
     - go mod tidy
 
 builds:
-  - id: craftybase
-    main: ./cmd/craftybase
-    binary: craftybase
+  - id: stocksmith
+    main: ./cmd/stocksmith
+    binary: stocksmith
     env:
       - CGO_ENABLED=0
     goos:
@@ -31,29 +31,29 @@ archives:
     format_overrides:
       - goos: windows
         formats: [zip]
-    name_template: "craftybase_{{.Version}}_{{.Os}}_{{.Arch}}"
+    name_template: "stocksmith_{{.Version}}_{{.Os}}_{{.Arch}}"
     files:
       - LICENSE
       - README.md
 
 checksum:
-  name_template: "craftybase_{{.Version}}_checksums.txt"
+  name_template: "stocksmith_{{.Version}}_checksums.txt"
   algorithm: sha256
 
 brews:
-  - name: craftybase
+  - name: stocksmith
     repository:
       owner: craftybase
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    homepage: "https://craftybase.com"
-    description: "Official CLI for the Craftybase Public API"
+    homepage: "https://cli.stocksmith.dev"
+    description: "Official CLI for the Stocksmith Public API"
     install: |
-      bin.install "craftybase"
+      bin.install "stocksmith"
     test: |
-      system "#{bin}/craftybase version"
+      system "#{bin}/stocksmith version"
 
 release:
   github:
     owner: craftybase
-    name: craftybase-cli
+    name: stocksmith-cli

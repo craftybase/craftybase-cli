@@ -1,9 +1,9 @@
 ---
-title: "craftybase materials"
-description: "Reference for the craftybase materials command."
+title: "stocksmith materials"
+description: "Reference for the stocksmith materials command."
 ---
 
-## craftybase materials
+## stocksmith materials
 
 Manage materials
 
@@ -16,7 +16,7 @@ Manage materials
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -26,7 +26,7 @@ Manage materials
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
-* [craftybase materials list](/reference/craftybase_materials_list/)	 - List materials
-* [craftybase materials show](/reference/craftybase_materials_show/)	 - Show a single material
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
+* [stocksmith materials list](/reference/stocksmith_materials_list/)	 - List materials
+* [stocksmith materials show](/reference/stocksmith_materials_show/)	 - Show a single material
 

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 func TestStyler_ColorDisabled_NoANSI(t *testing.T) {

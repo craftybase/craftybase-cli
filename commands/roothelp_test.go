@@ -28,16 +28,16 @@ func TestRenderRootHelp_PlainContent(t *testing.T) {
 	}
 	// tagline, sections, footer
 	for _, want := range []string{
-		"The command-line interface for Craftybase",
-		"$ craftybase materials list | show",
-		"$ craftybase auth login | status | logout",
+		"The command-line interface for Stocksmith",
+		"$ stocksmith materials list | show",
+		"$ stocksmith auth login | status | logout",
 		"Flags:",
 		"--json",
 		"Environment Variables:",
-		"CRAFTYBASE_API_TOKEN",
+		"STOCKSMITH_API_TOKEN",
 		"NO_COLOR",
-		"try: craftybase materials list",
-		"Learn more at https://cli.craftybase.dev/getting-started",
+		"try: stocksmith materials list",
+		"Learn more at https://cli.stocksmith.dev/getting-started",
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("expected output to contain %q", want)
@@ -63,10 +63,10 @@ func TestRenderRootHelp_NarrowDropsLogo(t *testing.T) {
 	if strings.Contains(out, rootLogo) {
 		t.Errorf("logo should be omitted on a narrow terminal")
 	}
-	if !strings.Contains(out, "Craftybase") {
-		t.Errorf("expected plain Craftybase heading fallback")
+	if !strings.Contains(out, "Stocksmith") {
+		t.Errorf("expected plain Stocksmith heading fallback")
 	}
-	if !strings.Contains(out, "The command-line interface for Craftybase") {
+	if !strings.Contains(out, "The command-line interface for Stocksmith") {
 		t.Errorf("tagline should still appear when logo is dropped")
 	}
 }
@@ -119,7 +119,7 @@ func TestExecute_NoArgs_ShowsBrandedScreen(t *testing.T) {
 		t.Fatalf("execute: %v", err)
 	}
 	out := buf.String()
-	if !strings.Contains(out, "The command-line interface for Craftybase") {
+	if !strings.Contains(out, "The command-line interface for Stocksmith") {
 		t.Errorf("no-args invocation should show the branded screen, got:\n%s", out)
 	}
 }
@@ -133,7 +133,7 @@ func TestExecute_RootHelpFlag_ShowsBrandedScreen(t *testing.T) {
 	if err := rootCmd.Execute(); err != nil {
 		t.Fatalf("execute: %v", err)
 	}
-	if !strings.Contains(buf.String(), "The command-line interface for Craftybase") {
+	if !strings.Contains(buf.String(), "The command-line interface for Stocksmith") {
 		t.Errorf("--help should show the branded screen")
 	}
 }
@@ -148,7 +148,7 @@ func TestExecute_SubcommandHelp_UsesDefault(t *testing.T) {
 		t.Fatalf("execute: %v", err)
 	}
 	out := buf.String()
-	if strings.Contains(out, "The command-line interface for Craftybase") {
+	if strings.Contains(out, "The command-line interface for Stocksmith") {
 		t.Errorf("subcommand help must not show the branded root screen")
 	}
 	if !strings.Contains(out, "Usage:") {

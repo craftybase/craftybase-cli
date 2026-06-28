@@ -6,13 +6,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
 )
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print version information",
-	Long:  "Print the craftybase CLI version, commit, build date, and platform.",
+	Long:  "Print the " + brand.BinaryName + " CLI version, commit, build date, and platform.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Printf("%s version %s (commit: %s, built: %s, %s, %s/%s)\n",
 			brand.BinaryName,

@@ -1,9 +1,9 @@
 ---
-title: "craftybase recipes"
-description: "Reference for the craftybase recipes command."
+title: "stocksmith recipes"
+description: "Reference for the stocksmith recipes command."
 ---
 
-## craftybase recipes
+## stocksmith recipes
 
 Manage recipes
 
@@ -16,7 +16,7 @@ Manage recipes
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -26,7 +26,7 @@ Manage recipes
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
-* [craftybase recipes list](/reference/craftybase_recipes_list/)	 - List recipes
-* [craftybase recipes show](/reference/craftybase_recipes_show/)	 - Show a single recipe
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
+* [stocksmith recipes list](/reference/stocksmith_recipes_list/)	 - List recipes
+* [stocksmith recipes show](/reference/stocksmith_recipes_show/)	 - Show a single recipe
 

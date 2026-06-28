@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/craftybase/stocksmith-cli/internal/brand"
 )
 
 type APIError struct {
@@ -21,11 +23,11 @@ func (e *APIError) Error() string {
 }
 
 var (
-	ErrUnauthorized = &APIError{StatusCode: 401, Message: "Not authenticated — run 'craftybase auth login'."}
+	ErrUnauthorized = &APIError{StatusCode: 401, Message: "Not authenticated — run '" + brand.BinaryName + " auth login'."}
 	ErrForbidden    = &APIError{StatusCode: 403, Message: "API access is not enabled for this account or plan."}
 	ErrNotFound     = &APIError{StatusCode: 404, Message: "Resource not found."}
 	ErrRateLimited  = &APIError{StatusCode: 429, Message: "Rate limit exceeded. Try again later."}
-	ErrServerError  = &APIError{StatusCode: 500, Message: "Craftybase API server error."}
+	ErrServerError  = &APIError{StatusCode: 500, Message: brand.ProductName + " API server error."}
 )
 
 func ExitCode(err error) int {
@@ -67,7 +69,7 @@ func MapHTTPError(resp *http.Response) error {
 	case 401:
 		return &APIError{
 			StatusCode: 401,
-			Message:    "Not authenticated — run 'craftybase auth login'.",
+			Message:    "Not authenticated — run '" + brand.BinaryName + " auth login'.",
 			RequestID:  requestID,
 		}
 	case 403:
@@ -88,7 +90,7 @@ func MapHTTPError(resp *http.Response) error {
 		if resp.StatusCode >= 500 {
 			msg := errorBody(body)
 			if msg == "" {
-				msg = fmt.Sprintf("Craftybase API error (%d).", resp.StatusCode)
+				msg = fmt.Sprintf("%s API error (%d).", brand.ProductName, resp.StatusCode)
 			}
 			if requestID != "" {
 				msg = fmt.Sprintf("%s Request ID: %s", msg, requestID)

@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/craftybase/craftybase-cli/internal/api"
+	"github.com/craftybase/stocksmith-cli/internal/api"
 )
 
 func newTestClient(server *httptest.Server) *api.Client {
@@ -80,8 +80,8 @@ func TestClient_UserAgent(t *testing.T) {
 	}
 	resp.Body.Close()
 
-	if !strings.HasPrefix(gotUA, "craftybase-cli/") {
-		t.Errorf("User-Agent should start with 'craftybase-cli/', got %q", gotUA)
+	if !strings.HasPrefix(gotUA, "stocksmith-cli/") {
+		t.Errorf("User-Agent should start with 'stocksmith-cli/', got %q", gotUA)
 	}
 }
 

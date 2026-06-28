@@ -73,7 +73,7 @@ func TestUpdate_CheckReportsAvailable(t *testing.T) {
 	if err := rootCmd.Execute(); err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(buf.String(), "craftybase v9.9.9 is available") {
+	if !strings.Contains(buf.String(), "stocksmith v9.9.9 is available") {
 		t.Errorf("--check output = %q", buf.String())
 	}
 }

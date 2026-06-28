@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/craftybase/craftybase-cli/internal/brand"
-	"github.com/craftybase/craftybase-cli/internal/config"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/config"
 )
 
 func TestLoadMissingFile(t *testing.T) {
@@ -79,7 +79,7 @@ func TestLoad_PermissionWarning(t *testing.T) {
 }
 
 func TestResolvedToken_Precedence(t *testing.T) {
-	t.Setenv("CRAFTYBASE_API_TOKEN", "")
+	t.Setenv("STOCKSMITH_API_TOKEN", "")
 
 	profile := &config.Profile{Token: "profile_token"}
 
@@ -88,13 +88,13 @@ func TestResolvedToken_Precedence(t *testing.T) {
 		t.Errorf("expected flag_token, got %q", tok)
 	}
 
-	t.Setenv("CRAFTYBASE_API_TOKEN", "env_token")
+	t.Setenv("STOCKSMITH_API_TOKEN", "env_token")
 	tok = config.ResolvedToken("", profile)
 	if tok != "env_token" {
 		t.Errorf("expected env_token, got %q", tok)
 	}
 
-	t.Setenv("CRAFTYBASE_API_TOKEN", "")
+	t.Setenv("STOCKSMITH_API_TOKEN", "")
 	tok = config.ResolvedToken("", profile)
 	if tok != "profile_token" {
 		t.Errorf("expected profile_token, got %q", tok)
@@ -107,24 +107,24 @@ func TestResolvedToken_Precedence(t *testing.T) {
 }
 
 func TestResolvedAPIURL_Precedence(t *testing.T) {
-	t.Setenv("CRAFTYBASE_API_URL", "")
+	t.Setenv("STOCKSMITH_API_URL", "")
 
-	profile := &config.Profile{APIURL: "https://staging.craftybase.com"}
+	profile := &config.Profile{APIURL: "https://staging.stocksmith.com"}
 
-	url := config.ResolvedAPIURL("https://flag.craftybase.com", profile)
-	if url != "https://flag.craftybase.com" {
+	url := config.ResolvedAPIURL("https://flag.stocksmith.com", profile)
+	if url != "https://flag.stocksmith.com" {
 		t.Errorf("expected flag URL, got %q", url)
 	}
 
-	t.Setenv("CRAFTYBASE_API_URL", "https://env.craftybase.com")
+	t.Setenv("STOCKSMITH_API_URL", "https://env.stocksmith.com")
 	url = config.ResolvedAPIURL("", profile)
-	if url != "https://env.craftybase.com" {
+	if url != "https://env.stocksmith.com" {
 		t.Errorf("expected env URL, got %q", url)
 	}
 
-	t.Setenv("CRAFTYBASE_API_URL", "")
+	t.Setenv("STOCKSMITH_API_URL", "")
 	url = config.ResolvedAPIURL("", profile)
-	if url != "https://staging.craftybase.com" {
+	if url != "https://staging.stocksmith.com" {
 		t.Errorf("expected profile URL, got %q", url)
 	}
 

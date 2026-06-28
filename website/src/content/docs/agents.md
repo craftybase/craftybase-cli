@@ -17,8 +17,8 @@ Any page is also available as raw markdown by appending `.md` to its URL.
 Prefer `--json` (one envelope) or `--ndjson` (one object per line, auto-paginated) when an agent consumes CLI output:
 
 ```sh
-craftybase materials list --json
-craftybase materials list --ndjson
+stocksmith materials list --json
+stocksmith materials list --ndjson
 ```
 
 Exit codes are stable: `0` success, `3` auth error, `4` not found, `1` otherwise.

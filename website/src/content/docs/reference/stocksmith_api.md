@@ -1,25 +1,25 @@
 ---
-title: "craftybase api"
-description: "Reference for the craftybase api command."
+title: "stocksmith api"
+description: "Reference for the stocksmith api command."
 ---
 
-## craftybase api
+## stocksmith api
 
 Make authenticated API requests
 
 ### Synopsis
 
-Make authenticated requests to the Craftybase API.
+Make authenticated requests to the Stocksmith API.
 
 The path must be the full API path starting with /api/v1/.
 
 Examples:
-  craftybase api GET /api/v1/account
-  craftybase api GET /api/v1/materials
-  craftybase api GET "/api/v1/materials?sku=WAX-001"
+  stocksmith api GET /api/v1/account
+  stocksmith api GET /api/v1/materials
+  stocksmith api GET "/api/v1/materials?sku=WAX-001"
 
 ```
-craftybase api <METHOD> <path> [flags]
+stocksmith api <METHOD> <path> [flags]
 ```
 
 ### Options
@@ -31,7 +31,7 @@ craftybase api <METHOD> <path> [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -41,5 +41,5 @@ craftybase api <METHOD> <path> [flags]
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
 

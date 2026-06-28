@@ -15,12 +15,12 @@ import (
 )
 
 func TestAssetNames(t *testing.T) {
-	c := Config{BinaryName: "craftybase", GOOS: "darwin", GOARCH: "arm64"}
+	c := Config{BinaryName: "stocksmith", GOOS: "darwin", GOARCH: "arm64"}
 	archive, checksums := c.assetNames("v0.3.0")
-	if archive != "craftybase_0.3.0_darwin_arm64.tar.gz" {
+	if archive != "stocksmith_0.3.0_darwin_arm64.tar.gz" {
 		t.Errorf("archive = %q", archive)
 	}
-	if checksums != "craftybase_0.3.0_checksums.txt" {
+	if checksums != "stocksmith_0.3.0_checksums.txt" {
 		t.Errorf("checksums = %q", checksums)
 	}
 }
@@ -51,16 +51,16 @@ func TestUpdateAvailable(t *testing.T) {
 }
 
 func TestIsBrewPath(t *testing.T) {
-	if !isBrewPath("/opt/homebrew/Cellar/craftybase/0.2.0/bin/craftybase") {
+	if !isBrewPath("/opt/homebrew/Cellar/stocksmith/0.2.0/bin/stocksmith") {
 		t.Error("brew Cellar path should be detected")
 	}
-	if isBrewPath("/Users/x/.local/bin/craftybase") {
+	if isBrewPath("/Users/x/.local/bin/stocksmith") {
 		t.Error(".local/bin path is not brew")
 	}
 }
 
 func TestGuardDevRefuses(t *testing.T) {
-	c := Config{BinaryName: "craftybase", CurrentVersion: "dev", GOOS: "darwin"}
+	c := Config{BinaryName: "stocksmith", CurrentVersion: "dev", GOOS: "darwin"}
 	err := c.guard()
 	if err == nil || !strings.Contains(err.Error(), "released builds") {
 		t.Errorf("dev guard err = %v", err)
@@ -68,7 +68,7 @@ func TestGuardDevRefuses(t *testing.T) {
 }
 
 func TestGuardWindowsRefuses(t *testing.T) {
-	c := Config{BinaryName: "craftybase", CurrentVersion: "0.2.0", GOOS: "windows", Repo: "craftybase/craftybase-cli"}
+	c := Config{BinaryName: "stocksmith", CurrentVersion: "0.2.0", GOOS: "windows", Repo: "craftybase/stocksmith-cli"}
 	err := c.guard()
 	if err == nil || !strings.Contains(err.Error(), "Windows") {
 		t.Errorf("windows guard err = %v", err)
@@ -78,11 +78,11 @@ func TestGuardWindowsRefuses(t *testing.T) {
 func TestGuardBrewRefuses(t *testing.T) {
 	// Build a real Cellar-shaped path with a symlink, since guard() EvalSymlinks.
 	root := t.TempDir()
-	cellarBin := filepath.Join(root, "Cellar", "craftybase", "0.2.0", "bin")
+	cellarBin := filepath.Join(root, "Cellar", "stocksmith", "0.2.0", "bin")
 	if err := os.MkdirAll(cellarBin, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	realBin := filepath.Join(cellarBin, "craftybase")
+	realBin := filepath.Join(cellarBin, "stocksmith")
 	if err := os.WriteFile(realBin, []byte("x"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -90,11 +90,11 @@ func TestGuardBrewRefuses(t *testing.T) {
 	if err := os.MkdirAll(linkDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	link := filepath.Join(linkDir, "craftybase")
+	link := filepath.Join(linkDir, "stocksmith")
 	if err := os.Symlink(realBin, link); err != nil {
 		t.Fatal(err)
 	}
-	c := Config{BinaryName: "craftybase", CurrentVersion: "0.2.0", GOOS: "darwin", ExecPath: link}
+	c := Config{BinaryName: "stocksmith", CurrentVersion: "0.2.0", GOOS: "darwin", ExecPath: link}
 	err := c.guard()
 	if err == nil || !strings.Contains(err.Error(), "Homebrew") {
 		t.Errorf("brew guard err = %v", err)
@@ -103,11 +103,11 @@ func TestGuardBrewRefuses(t *testing.T) {
 
 func TestGuardPassesForWritableLocalBin(t *testing.T) {
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "craftybase")
+	exe := filepath.Join(dir, "stocksmith")
 	if err := os.WriteFile(exe, []byte("x"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	c := Config{BinaryName: "craftybase", CurrentVersion: "0.2.0", GOOS: "darwin", ExecPath: exe}
+	c := Config{BinaryName: "stocksmith", CurrentVersion: "0.2.0", GOOS: "darwin", ExecPath: exe}
 	if err := c.guard(); err != nil {
 		t.Errorf("guard should pass, got %v", err)
 	}
@@ -122,7 +122,7 @@ func TestLatestVersion(t *testing.T) {
 			return
 		}
 		gotUA = ua
-		if r.URL.Path == "/repos/craftybase/craftybase-cli/releases/latest" {
+		if r.URL.Path == "/repos/craftybase/stocksmith-cli/releases/latest" {
 			_, _ = w.Write([]byte(`{"tag_name":"v0.3.0"}`))
 			return
 		}
@@ -130,7 +130,7 @@ func TestLatestVersion(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	c := Config{BinaryName: "craftybase", CurrentVersion: "0.3.0", Repo: "craftybase/craftybase-cli", APIBaseURL: srv.URL}
+	c := Config{BinaryName: "stocksmith", CurrentVersion: "0.3.0", Repo: "craftybase/stocksmith-cli", APIBaseURL: srv.URL}
 	got, err := c.LatestVersion()
 	if err != nil {
 		t.Fatal(err)
@@ -168,11 +168,11 @@ func makeTarGz(t *testing.T, name string, content []byte) []byte {
 func TestVerifyChecksum(t *testing.T) {
 	archive := []byte("fake-archive-bytes")
 	sum := sha256.Sum256(archive)
-	line := hex.EncodeToString(sum[:]) + "  craftybase_0.3.0_darwin_arm64.tar.gz\n"
-	if err := verifyChecksum(archive, []byte(line), "craftybase_0.3.0_darwin_arm64.tar.gz"); err != nil {
+	line := hex.EncodeToString(sum[:]) + "  stocksmith_0.3.0_darwin_arm64.tar.gz\n"
+	if err := verifyChecksum(archive, []byte(line), "stocksmith_0.3.0_darwin_arm64.tar.gz"); err != nil {
 		t.Errorf("matching checksum should pass: %v", err)
 	}
-	if err := verifyChecksum([]byte("tampered"), []byte(line), "craftybase_0.3.0_darwin_arm64.tar.gz"); err == nil {
+	if err := verifyChecksum([]byte("tampered"), []byte(line), "stocksmith_0.3.0_darwin_arm64.tar.gz"); err == nil {
 		t.Error("tampered archive should fail")
 	}
 	if err := verifyChecksum(archive, []byte(line), "missing.tar.gz"); err == nil {
@@ -182,8 +182,8 @@ func TestVerifyChecksum(t *testing.T) {
 
 func TestExtractBinary(t *testing.T) {
 	want := []byte("#!/bin/sh\necho hi\n")
-	archive := makeTarGz(t, "craftybase", want)
-	got, err := extractBinary(archive, "craftybase")
+	archive := makeTarGz(t, "stocksmith", want)
+	got, err := extractBinary(archive, "stocksmith")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -197,7 +197,7 @@ func TestExtractBinary(t *testing.T) {
 
 func TestReplaceExecutable(t *testing.T) {
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "craftybase")
+	exe := filepath.Join(dir, "stocksmith")
 	if err := os.WriteFile(exe, []byte("OLD"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -222,11 +222,11 @@ func TestReplaceExecutable(t *testing.T) {
 
 func TestReplaceExecutableThroughSymlink(t *testing.T) {
 	dir := t.TempDir()
-	real := filepath.Join(dir, "craftybase-real")
+	real := filepath.Join(dir, "stocksmith-real")
 	if err := os.WriteFile(real, []byte("OLD"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	link := filepath.Join(dir, "craftybase")
+	link := filepath.Join(dir, "stocksmith")
 	if err := os.Symlink(real, link); err != nil {
 		t.Fatal(err)
 	}
@@ -249,13 +249,13 @@ func newReleaseServer(t *testing.T, tag string, archiveName, checksumsName strin
 	sum := sha256.Sum256(archive)
 	checksums := hex.EncodeToString(sum[:]) + "  " + archiveName + "\n"
 	mux := http.NewServeMux()
-	mux.HandleFunc("/repos/craftybase/craftybase-cli/releases/latest", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/repos/craftybase/stocksmith-cli/releases/latest", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(`{"tag_name":"` + tag + `"}`))
 	})
-	mux.HandleFunc("/craftybase/craftybase-cli/releases/download/"+tag+"/"+archiveName, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/craftybase/stocksmith-cli/releases/download/"+tag+"/"+archiveName, func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write(archive)
 	})
-	mux.HandleFunc("/craftybase/craftybase-cli/releases/download/"+tag+"/"+checksumsName, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/craftybase/stocksmith-cli/releases/download/"+tag+"/"+checksumsName, func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(checksums))
 	})
 	return httptest.NewServer(mux)
@@ -263,17 +263,17 @@ func newReleaseServer(t *testing.T, tag string, archiveName, checksumsName strin
 
 func TestRunUpdatesWhenNewer(t *testing.T) {
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "craftybase")
+	exe := filepath.Join(dir, "stocksmith")
 	if err := os.WriteFile(exe, []byte("OLD"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	archive := makeTarGz(t, "craftybase", []byte("NEW-BINARY"))
-	srv := newReleaseServer(t, "v0.3.0", "craftybase_0.3.0_darwin_arm64.tar.gz", "craftybase_0.3.0_checksums.txt", archive)
+	archive := makeTarGz(t, "stocksmith", []byte("NEW-BINARY"))
+	srv := newReleaseServer(t, "v0.3.0", "stocksmith_0.3.0_darwin_arm64.tar.gz", "stocksmith_0.3.0_checksums.txt", archive)
 	defer srv.Close()
 
 	var out bytes.Buffer
 	c := Config{
-		BinaryName: "craftybase", Repo: "craftybase/craftybase-cli",
+		BinaryName: "stocksmith", Repo: "craftybase/stocksmith-cli",
 		CurrentVersion: "0.2.0", GOOS: "darwin", GOARCH: "arm64",
 		ExecPath: exe, APIBaseURL: srv.URL, DownloadBaseURL: srv.URL, Out: &out,
 	}
@@ -284,23 +284,23 @@ func TestRunUpdatesWhenNewer(t *testing.T) {
 	if string(got) != "NEW-BINARY" {
 		t.Errorf("binary not replaced: %q", got)
 	}
-	if !strings.Contains(out.String(), "Updated craftybase 0.2.0 → 0.3.0") {
+	if !strings.Contains(out.String(), "Updated stocksmith 0.2.0 → 0.3.0") {
 		t.Errorf("output = %q", out.String())
 	}
 }
 
 func TestRunNoopWhenCurrent(t *testing.T) {
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "craftybase")
+	exe := filepath.Join(dir, "stocksmith")
 	if err := os.WriteFile(exe, []byte("OLD"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	srv := newReleaseServer(t, "v0.2.0", "craftybase_0.2.0_darwin_arm64.tar.gz", "craftybase_0.2.0_checksums.txt", makeTarGz(t, "craftybase", []byte("X")))
+	srv := newReleaseServer(t, "v0.2.0", "stocksmith_0.2.0_darwin_arm64.tar.gz", "stocksmith_0.2.0_checksums.txt", makeTarGz(t, "stocksmith", []byte("X")))
 	defer srv.Close()
 
 	var out bytes.Buffer
 	c := Config{
-		BinaryName: "craftybase", Repo: "craftybase/craftybase-cli",
+		BinaryName: "stocksmith", Repo: "craftybase/stocksmith-cli",
 		CurrentVersion: "0.2.0", GOOS: "darwin", GOARCH: "arm64",
 		ExecPath: exe, APIBaseURL: srv.URL, DownloadBaseURL: srv.URL, Out: &out,
 	}
@@ -318,7 +318,7 @@ func TestRunNoopWhenCurrent(t *testing.T) {
 func TestCheckReportsAvailability(t *testing.T) {
 	srv := newReleaseServer(t, "v0.3.0", "a", "b", []byte("x"))
 	defer srv.Close()
-	c := Config{Repo: "craftybase/craftybase-cli", CurrentVersion: "0.2.0", APIBaseURL: srv.URL}
+	c := Config{Repo: "craftybase/stocksmith-cli", CurrentVersion: "0.2.0", APIBaseURL: srv.URL}
 	cur, latest, avail, err := c.Check()
 	if err != nil {
 		t.Fatal(err)

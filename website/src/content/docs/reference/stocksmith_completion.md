@@ -1,33 +1,33 @@
 ---
-title: "craftybase completion"
-description: "Reference for the craftybase completion command."
+title: "stocksmith completion"
+description: "Reference for the stocksmith completion command."
 ---
 
-## craftybase completion
+## stocksmith completion
 
 Generate shell completion scripts
 
 ### Synopsis
 
-Generate shell completion scripts for craftybase.
+Generate shell completion scripts for stocksmith.
 
 To load completions:
 
 Bash:
-  $ source <(craftybase completion bash)
+  $ source <(stocksmith completion bash)
 
 Zsh:
-  $ source <(craftybase completion zsh)
+  $ source <(stocksmith completion zsh)
 
 Fish:
-  $ craftybase completion fish | source
+  $ stocksmith completion fish | source
 
 PowerShell:
-  PS> craftybase completion powershell | Out-String | Invoke-Expression
+  PS> stocksmith completion powershell | Out-String | Invoke-Expression
 
 
 ```
-craftybase completion [bash|zsh|fish|powershell]
+stocksmith completion [bash|zsh|fish|powershell]
 ```
 
 ### Options
@@ -39,7 +39,7 @@ craftybase completion [bash|zsh|fish|powershell]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.dev)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -49,5 +49,5 @@ craftybase completion [bash|zsh|fish|powershell]
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
 

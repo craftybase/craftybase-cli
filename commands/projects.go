@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 // Project is a product or component (both are Projects on the API, distinguished

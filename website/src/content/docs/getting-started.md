@@ -1,28 +1,28 @@
 ---
 title: Getting Started
-description: Install the Craftybase CLI, authenticate, and run your first command.
+description: Install the Stocksmith CLI, authenticate, and run your first command.
 ---
 
 ## Install
 
 ```sh
-curl -fsSL https://cli.craftybase.dev/install | bash
+curl -fsSL https://cli.stocksmith.dev/install | bash
 ```
 
-This downloads the right binary for your OS/architecture, verifies its checksum, and installs `craftybase` to `/usr/local/bin` (or `~/.local/bin`). Homebrew (`brew install craftybase/tap/craftybase`) and `go install github.com/craftybase/craftybase-cli/cmd/craftybase@latest` also work.
+This downloads the right binary for your OS/architecture, verifies its checksum, and installs `stocksmith` to `/usr/local/bin` (or `~/.local/bin`). Homebrew (`brew install craftybase/tap/stocksmith`) and `go install github.com/craftybase/stocksmith-cli/cmd/stocksmith@latest` also work.
 
 ## Authenticate
 
 ```sh
-craftybase auth login
+stocksmith auth login
 ```
 
-Paste your Craftybase API key when prompted (input is hidden). Credentials are saved to `~/.craftybase/config.toml`. See [Authentication](/authentication/).
+Paste your Stocksmith API key when prompted (input is hidden). Credentials are saved to `~/.stocksmith/config.toml`. See [Authentication](/authentication/).
 
 ## First command
 
 ```sh
-craftybase materials list
+stocksmith materials list
 ```
 
 Add `--json` for the raw API envelope or `--ndjson` to stream every page. See [Output Formats](/output-formats/).

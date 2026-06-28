@@ -9,7 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 // Expense is a supplier purchase (the "purchases" data; there is no PurchaseOrder
@@ -177,12 +178,11 @@ func init() {
 		pathSegment: "expenses",
 		collection:  "expenses",
 		singular:    "expense",
-		listLong: `List expenses (purchases) from your Craftybase account.
-
-An expense is a supplier purchase — header totals plus the materials and costs
-on each line. Filter by purchase-date range, change time, category, or supplier.
-Use --all to fetch all pages, or --ndjson for streaming NDJSON output suitable
-for data pipelines.`,
+		listLong: "List expenses (purchases) from your " + brand.ProductName + " account.\n\n" +
+			"An expense is a supplier purchase — header totals plus the materials and costs\n" +
+			"on each line. Filter by purchase-date range, change time, category, or supplier.\n" +
+			"Use --all to fetch all pages, or --ndjson for streaming NDJSON output suitable\n" +
+			"for data pipelines.",
 		toTable:    expensesToTable,
 		renderShow: renderExpenseShow,
 	}
