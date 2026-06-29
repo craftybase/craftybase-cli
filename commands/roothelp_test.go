@@ -45,10 +45,10 @@ func TestRenderRootHelp_PlainContent(t *testing.T) {
 	}
 }
 
-func TestRenderRootHelp_ColorUsesTeal(t *testing.T) {
+func TestRenderRootHelp_ColorUsesAmber(t *testing.T) {
 	out := renderToString(renderOpts{color: true, trueColor: true, width: 100})
-	if !strings.Contains(out, "\033[38;2;62;177;193m") {
-		t.Errorf("expected bright-teal (62;177;193) somewhere in colored output")
+	if !strings.Contains(out, "\033[38;2;225;142;45m") {
+		t.Errorf("expected burnt-amber (225;142;45) somewhere in colored output")
 	}
 	if !strings.Contains(out, "\033[38;2;196;141;129m") {
 		t.Errorf("expected terracotta (196;141;129) for the try: command")

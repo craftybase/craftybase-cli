@@ -21,7 +21,7 @@ export default defineConfig({
       },
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://cli.stocksmith.dev/favicon.svg' } },
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#3EB1C1' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#E18E2D' } },
       ],
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/craftybase/stocksmith-cli' },
