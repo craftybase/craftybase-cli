@@ -8,13 +8,13 @@ import (
 // RGB is a 24-bit color.
 type RGB struct{ R, G, B uint8 }
 
-// Craftybase brand palette.
+// Stocksmith brand palette.
 var (
-	TealBright = RGB{62, 177, 193}  // #3EB1C1
-	TealLight  = RGB{101, 193, 205} // #65C1CD
-	GrayDim    = RGB{111, 111, 111} // #6F6F6F
-	Gray       = RGB{131, 127, 127} // #837f7f
-	Terracotta = RGB{196, 141, 129} // #C48D81
+	AmberBright = RGB{225, 142, 45}  // #E18E2D - burnt amber (brand ochre)
+	AmberLight  = RGB{235, 172, 90}  // #EBAC5A - lighter amber accent
+	GrayDim     = RGB{111, 111, 111} // #6F6F6F
+	Gray        = RGB{131, 127, 127} // #837f7f
+	Terracotta  = RGB{196, 141, 129} // #C48D81
 )
 
 // SupportsTrueColor reports whether the terminal advertises 24-bit color.

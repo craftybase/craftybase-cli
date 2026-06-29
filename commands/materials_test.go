@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 func sampleMaterialJSON() json.RawMessage {

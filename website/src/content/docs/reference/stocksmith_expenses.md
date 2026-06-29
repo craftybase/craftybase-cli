@@ -1,9 +1,9 @@
 ---
-title: "craftybase expenses"
-description: "Reference for the craftybase expenses command."
+title: "stocksmith expenses"
+description: "Reference for the stocksmith expenses command."
 ---
 
-## craftybase expenses
+## stocksmith expenses
 
 Manage expenses
 
@@ -16,7 +16,7 @@ Manage expenses
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -26,7 +26,7 @@ Manage expenses
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
-* [craftybase expenses list](/reference/craftybase_expenses_list/)	 - List expenses
-* [craftybase expenses show](/reference/craftybase_expenses_show/)	 - Show a single expense
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
+* [stocksmith expenses list](/reference/stocksmith_expenses_list/)	 - List expenses
+* [stocksmith expenses show](/reference/stocksmith_expenses_show/)	 - Show a single expense
 

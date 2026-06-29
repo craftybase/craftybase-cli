@@ -7,7 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 type Material struct {
@@ -82,10 +83,9 @@ func init() {
 		pathSegment: "materials",
 		collection:  "materials",
 		singular:    "material",
-		listLong: `List materials from your Craftybase account.
-
-Filter by SKU, name, category, or state. Use --all to fetch all pages,
-or --ndjson for streaming NDJSON output suitable for data pipelines.`,
+		listLong: "List materials from your " + brand.ProductName + " account.\n\n" +
+			"Filter by SKU, name, category, or state. Use --all to fetch all pages,\n" +
+			"or --ndjson for streaming NDJSON output suitable for data pipelines.",
 		toTable:    materialsToTable,
 		renderShow: renderMaterialShow,
 	}

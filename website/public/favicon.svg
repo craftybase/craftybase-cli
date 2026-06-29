@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#3EB1C1"/><text x="16" y="22" font-family="monospace" font-size="18" font-weight="700" text-anchor="middle" fill="#ffffff">c</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 134 155">
+  <!-- Stocksmith mark, lifted from the wordmark logo, in the brand amber. -->
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M13.3811 107.881V53.9406L60.0824 80.8964V134.849L40.0766 123.305V123.295L13.3829 107.881H13.3811ZM68.9347 33.69L46.5386 46.6225L69.6607 59.9694L83.0127 67.6711V115.513H83.1634L94.2861 89.324L105.411 102.842V54.7471L92.0585 47.0352L68.9347 33.69ZM133.555 115.574V38.5254L70.1247 1.92456L66.7858 0L33.4212 19.2627H33.3886L0 38.5288V115.585L22.3961 128.509L33.3886 134.839H33.4195L63.3579 152.127L66.7876 154.101L133.555 115.574Z" fill="#EE8F38"/>
+</svg>

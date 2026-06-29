@@ -7,9 +7,10 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
-	"github.com/craftybase/craftybase-cli/internal/api"
-	"github.com/craftybase/craftybase-cli/internal/config"
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/api"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/config"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 var (
@@ -22,13 +23,13 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "craftybase",
-	Short: "Official CLI for the Craftybase Public API",
-	Long: `craftybase is a command-line interface for the Craftybase Public API.
+	Use:   brand.BinaryName,
+	Short: "Official CLI for the " + brand.ProductName + " Public API",
+	Long: brand.BinaryName + ` is a command-line interface for the ` + brand.ProductName + ` Public API.
 
 Authenticate once, then manage your inventory from the terminal.
 
-Documentation: https://craftybase.com/docs/api`,
+Documentation: ` + brand.DocsURL,
 	SilenceUsage:  true,
 	SilenceErrors: true,
 }
@@ -52,7 +53,7 @@ func Execute(version string) {
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&flagToken, "token", "", "API token (overrides stored credentials)")
-	rootCmd.PersistentFlags().StringVar(&flagAPIURL, "api-url", "", "API base URL (default: https://api.craftybase.com)")
+	rootCmd.PersistentFlags().StringVar(&flagAPIURL, "api-url", "", "API base URL (default: "+brand.DefaultAPIURL+")")
 	rootCmd.PersistentFlags().BoolVar(&flagJSON, "json", false, "Output raw API envelope (pretty-printed JSON)")
 	rootCmd.PersistentFlags().BoolVar(&flagNDJSON, "ndjson", false, "Output auto-paginated NDJSON stream")
 	rootCmd.PersistentFlags().BoolVar(&flagNoColor, "no-color", false, "Disable ANSI color output")
@@ -102,7 +103,7 @@ func requireAuth() (*api.Client, *config.Profile, error) {
 	if client.Token == "" {
 		return nil, nil, &api.APIError{
 			StatusCode: 401,
-			Message:    "Not authenticated — run 'craftybase auth login'.",
+			Message:    "Not authenticated — run '" + brand.BinaryName + " auth login'.",
 		}
 	}
 	return client, profile, nil

@@ -1,14 +1,14 @@
 ---
-title: "craftybase components show"
-description: "Reference for the craftybase components show command."
+title: "stocksmith manufactures show"
+description: "Reference for the stocksmith manufactures show command."
 ---
 
-## craftybase components show
+## stocksmith manufactures show
 
-Show a single component
+Show a single manufacture
 
 ```
-craftybase components show <id> [flags]
+stocksmith manufactures show <id> [flags]
 ```
 
 ### Options
@@ -20,7 +20,7 @@ craftybase components show <id> [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -30,5 +30,5 @@ craftybase components show <id> [flags]
 
 ### SEE ALSO
 
-* [craftybase components](/reference/craftybase_components/)	 - Manage components
+* [stocksmith manufactures](/reference/stocksmith_manufactures/)	 - Manage manufactures
 

@@ -12,8 +12,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/api"
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/api"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 // warnWriter receives non-fatal warnings (e.g. skipped malformed list items).

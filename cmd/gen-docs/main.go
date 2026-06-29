@@ -11,7 +11,7 @@ import (
 
 	"github.com/spf13/cobra/doc"
 
-	"github.com/craftybase/craftybase-cli/commands"
+	"github.com/craftybase/stocksmith-cli/commands"
 )
 
 // outDir is relative to the repo root; run gen-docs from there.

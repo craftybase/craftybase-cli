@@ -1,6 +1,6 @@
 ---
 name: cut-release
-description: Cut a new tagged release of the craftybase CLI — pre-flight green check, semver version decision, tag + push (which triggers GoReleaser), and post-publish verification of the GitHub release assets and Homebrew tap. Use when the user asks to cut, ship, publish, or tag a new version / release.
+description: Cut a new tagged release of the stocksmith CLI — pre-flight green check, semver version decision, tag + push (which triggers GoReleaser), and post-publish verification of the GitHub release assets and Homebrew tap. Use when the user asks to cut, ship, publish, or tag a new version / release.
 ---
 
 # Cut a Release
@@ -123,7 +123,7 @@ and is not a failure.)
   root):
 
   ```bash
-  gh api repos/<tap-owner>/<tap-repo>/contents/craftybase.rb \
+  gh api repos/<tap-owner>/<tap-repo>/contents/stocksmith.rb \
     --jq '.content' | base64 -d | grep -E 'version|url' | head
   ```
 
@@ -133,24 +133,24 @@ and is not a failure.)
 
   ```bash
   D=$(mktemp -d); gh release download "vX.Y.Z" --repo <owner>/<repo> \
-    -p "craftybase_<X.Y.Z>_darwin_arm64.tar.gz" -D "$D"
-  tar -xzf "$D"/craftybase_*.tar.gz -C "$D" && "$D/craftybase" version
+    -p "stocksmith_<X.Y.Z>_darwin_arm64.tar.gz" -D "$D"
+  tar -xzf "$D"/stocksmith_*.tar.gz -C "$D" && "$D/stocksmith" version
   ```
 
 ### 6. Report
 
 Summarize: release URL (`gh release view vX.Y.Z --json url`), the version,
 the published assets, and the tap status. Note any follow-ups (e.g. "users on
-an older install upgrade via `brew upgrade craftybase`, `craftybase update`,
+an older install upgrade via `brew upgrade stocksmith`, `stocksmith update`,
 or re-running the install script").
 
 ## Gotchas (hard-won)
 
 - **Stale binary shadowing after release.** A user (or you) may have an old
-  `~/.local/bin/craftybase` that shadows the brew copy on `PATH`, so
-  `craftybase version` still shows the old version. Diagnose with
-  `which -a craftybase`; the fix is to remove the stale script-install copy or
-  re-run the installer / `craftybase update`.
+  `~/.local/bin/stocksmith` that shadows the brew copy on `PATH`, so
+  `stocksmith version` still shows the old version. Diagnose with
+  `which -a stocksmith`; the fix is to remove the stale script-install copy or
+  re-run the installer / `stocksmith update`.
 - **The Homebrew tap must actually bump.** GoReleaser's `brews:` block pushes
   the formula to the tap repo using `HOMEBREW_TAP_TOKEN`. If the formula didn't
   update, check that secret and the release-run logs — the GitHub release can

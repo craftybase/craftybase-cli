@@ -4,19 +4,27 @@ import starlight from '@astrojs/starlight';
 import starlightLlmsTxt from 'starlight-llms-txt';
 
 export default defineConfig({
-  site: 'https://cli.craftybase.dev',
+  site: 'https://cli.stocksmith.dev',
   integrations: [
     starlight({
       plugins: [starlightLlmsTxt()],
-      title: 'Craftybase CLI',
-      description: 'The command-line interface for Craftybase.',
+      title: 'Stocksmith CLI',
+      description: 'The command-line interface for Stocksmith.',
       favicon: '/favicon.svg',
+      // Logos are named by their own colour, so map by theme function:
+      // black wordmark on light backgrounds, white wordmark on dark backgrounds.
+      logo: {
+        light: './src/assets/logo-dark.svg',
+        dark: './src/assets/logo-light.svg',
+        replacesTitle: true,
+        alt: 'Stocksmith CLI',
+      },
       head: [
-        { tag: 'meta', attrs: { property: 'og:image', content: 'https://cli.craftybase.dev/favicon.svg' } },
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#3EB1C1' } },
+        { tag: 'meta', attrs: { property: 'og:image', content: 'https://cli.stocksmith.dev/favicon.svg' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#E18E2D' } },
       ],
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/craftybase/craftybase-cli' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/craftybase/stocksmith-cli' },
       ],
       sidebar: [
         { label: 'Getting Started', slug: 'getting-started' },

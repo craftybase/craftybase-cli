@@ -1,22 +1,22 @@
 ---
-title: "craftybase update"
-description: "Reference for the craftybase update command."
+title: "stocksmith update"
+description: "Reference for the stocksmith update command."
 ---
 
-## craftybase update
+## stocksmith update
 
-Update craftybase to the latest release
+Update stocksmith to the latest release
 
 ### Synopsis
 
-Update the craftybase binary in place to the latest GitHub release.
+Update the stocksmith binary in place to the latest GitHub release.
 
 Downloads the release archive for your platform, verifies its SHA-256 checksum,
 and atomically replaces the running binary. Homebrew installs should use
-'brew upgrade craftybase'; Windows users download the release zip manually.
+'brew upgrade stocksmith'; Windows users download the release zip manually.
 
 ```
-craftybase update [flags]
+stocksmith update [flags]
 ```
 
 ### Options
@@ -29,7 +29,7 @@ craftybase update [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -39,5 +39,5 @@ craftybase update [flags]
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
 

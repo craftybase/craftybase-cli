@@ -1,9 +1,9 @@
 ---
-title: "craftybase components"
-description: "Reference for the craftybase components command."
+title: "stocksmith components"
+description: "Reference for the stocksmith components command."
 ---
 
-## craftybase components
+## stocksmith components
 
 Manage components
 
@@ -16,7 +16,7 @@ Manage components
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -26,7 +26,7 @@ Manage components
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
-* [craftybase components list](/reference/craftybase_components_list/)	 - List components
-* [craftybase components show](/reference/craftybase_components_show/)	 - Show a single component
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
+* [stocksmith components list](/reference/stocksmith_components_list/)	 - List components
+* [stocksmith components show](/reference/stocksmith_components_show/)	 - Show a single component
 

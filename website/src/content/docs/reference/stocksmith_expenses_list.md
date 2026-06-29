@@ -1,15 +1,15 @@
 ---
-title: "craftybase expenses list"
-description: "Reference for the craftybase expenses list command."
+title: "stocksmith expenses list"
+description: "Reference for the stocksmith expenses list command."
 ---
 
-## craftybase expenses list
+## stocksmith expenses list
 
 List expenses
 
 ### Synopsis
 
-List expenses (purchases) from your Craftybase account.
+List expenses (purchases) from your Stocksmith account.
 
 An expense is a supplier purchase — header totals plus the materials and costs
 on each line. Filter by purchase-date range, change time, category, or supplier.
@@ -17,7 +17,7 @@ Use --all to fetch all pages, or --ndjson for streaming NDJSON output suitable
 for data pipelines.
 
 ```
-craftybase expenses list [flags]
+stocksmith expenses list [flags]
 ```
 
 ### Options
@@ -37,7 +37,7 @@ craftybase expenses list [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -47,5 +47,5 @@ craftybase expenses list [flags]
 
 ### SEE ALSO
 
-* [craftybase expenses](/reference/craftybase_expenses/)	 - Manage expenses
+* [stocksmith expenses](/reference/stocksmith_expenses/)	 - Manage expenses
 

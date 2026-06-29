@@ -9,7 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 // Recipe is a bill of materials (formulation) for a product or variation. Only
@@ -177,12 +178,11 @@ func init() {
 		pathSegment: "recipes",
 		collection:  "recipes",
 		singular:    "recipe",
-		listLong: `List recipes (bills of materials) from your Craftybase account.
-
-A recipe is the formulation for a product or variation — the materials and
-quantities consumed per batch, with cost and COGS rollups. Filter by product,
-variation, or change time. Use --all to fetch all pages, or --ndjson for
-streaming NDJSON output suitable for data pipelines.`,
+		listLong: "List recipes (bills of materials) from your " + brand.ProductName + " account.\n\n" +
+			"A recipe is the formulation for a product or variation — the materials and\n" +
+			"quantities consumed per batch, with cost and COGS rollups. Filter by product,\n" +
+			"variation, or change time. Use --all to fetch all pages, or --ndjson for\n" +
+			"streaming NDJSON output suitable for data pipelines.",
 		toTable:    recipesToTable,
 		renderShow: renderRecipeShow,
 	}

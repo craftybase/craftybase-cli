@@ -1,14 +1,14 @@
 ---
-title: "craftybase products list"
-description: "Reference for the craftybase products list command."
+title: "stocksmith components list"
+description: "Reference for the stocksmith components list command."
 ---
 
-## craftybase products list
+## stocksmith components list
 
-List products
+List components
 
 ```
-craftybase products list [flags]
+stocksmith components list [flags]
 ```
 
 ### Options
@@ -27,7 +27,7 @@ craftybase products list [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -37,5 +37,5 @@ craftybase products list [flags]
 
 ### SEE ALSO
 
-* [craftybase products](/reference/craftybase_products/)	 - Manage products
+* [stocksmith components](/reference/stocksmith_components/)	 - Manage components
 

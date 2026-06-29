@@ -1,9 +1,9 @@
 ---
-title: "craftybase products"
-description: "Reference for the craftybase products command."
+title: "stocksmith products"
+description: "Reference for the stocksmith products command."
 ---
 
-## craftybase products
+## stocksmith products
 
 Manage products
 
@@ -16,7 +16,7 @@ Manage products
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -26,7 +26,7 @@ Manage products
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
-* [craftybase products list](/reference/craftybase_products_list/)	 - List products
-* [craftybase products show](/reference/craftybase_products_show/)	 - Show a single product
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
+* [stocksmith products list](/reference/stocksmith_products_list/)	 - List products
+* [stocksmith products show](/reference/stocksmith_products_show/)	 - Show a single product
 

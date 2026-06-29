@@ -1,14 +1,14 @@
 ---
-title: "craftybase materials show"
-description: "Reference for the craftybase materials show command."
+title: "stocksmith expenses show"
+description: "Reference for the stocksmith expenses show command."
 ---
 
-## craftybase materials show
+## stocksmith expenses show
 
-Show a single material
+Show a single expense
 
 ```
-craftybase materials show <id> [flags]
+stocksmith expenses show <id> [flags]
 ```
 
 ### Options
@@ -20,7 +20,7 @@ craftybase materials show <id> [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -30,5 +30,5 @@ craftybase materials show <id> [flags]
 
 ### SEE ALSO
 
-* [craftybase materials](/reference/craftybase_materials/)	 - Manage materials
+* [stocksmith expenses](/reference/stocksmith_expenses/)	 - Manage expenses
 

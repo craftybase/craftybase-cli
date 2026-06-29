@@ -2,27 +2,23 @@ package commands
 
 import (
 	"github.com/spf13/cobra"
+
+	"github.com/craftybase/stocksmith-cli/internal/brand"
 )
 
 var completionCmd = &cobra.Command{
 	Use:   "completion [bash|zsh|fish|powershell]",
 	Short: "Generate shell completion scripts",
-	Long: `Generate shell completion scripts for craftybase.
-
-To load completions:
-
-Bash:
-  $ source <(craftybase completion bash)
-
-Zsh:
-  $ source <(craftybase completion zsh)
-
-Fish:
-  $ craftybase completion fish | source
-
-PowerShell:
-  PS> craftybase completion powershell | Out-String | Invoke-Expression
-`,
+	Long: "Generate shell completion scripts for " + brand.BinaryName + ".\n\n" +
+		"To load completions:\n\n" +
+		"Bash:\n" +
+		"  $ source <(" + brand.BinaryName + " completion bash)\n\n" +
+		"Zsh:\n" +
+		"  $ source <(" + brand.BinaryName + " completion zsh)\n\n" +
+		"Fish:\n" +
+		"  $ " + brand.BinaryName + " completion fish | source\n\n" +
+		"PowerShell:\n" +
+		"  PS> " + brand.BinaryName + " completion powershell | Out-String | Invoke-Expression\n",
 	DisableFlagsInUseLine: true,
 	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
 	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),

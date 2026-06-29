@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/craftybase/craftybase-cli/commands"
+	"github.com/craftybase/stocksmith-cli/commands"
 )
 
 var (

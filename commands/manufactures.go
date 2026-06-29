@@ -9,7 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 // Manufacture is a production run. Only fields the CLI renders or passes through
@@ -180,10 +181,9 @@ func init() {
 		pathSegment: "manufactures",
 		collection:  "manufactures",
 		singular:    "manufacture",
-		listLong: `List production runs (manufactures) from your Craftybase account.
-
-Filter by product, status, or start-date range. Use --all to fetch all
-pages, or --ndjson for streaming NDJSON output suitable for data pipelines.`,
+		listLong: "List production runs (manufactures) from your " + brand.ProductName + " account.\n\n" +
+			"Filter by product, status, or start-date range. Use --all to fetch all\n" +
+			"pages, or --ndjson for streaming NDJSON output suitable for data pipelines.",
 		toTable:    manufacturesToTable,
 		renderShow: renderManufactureShow,
 	}

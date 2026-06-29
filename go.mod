@@ -1,4 +1,4 @@
-module github.com/craftybase/craftybase-cli
+module github.com/craftybase/stocksmith-cli
 
 go 1.26.4
 

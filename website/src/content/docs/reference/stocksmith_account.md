@@ -1,9 +1,9 @@
 ---
-title: "craftybase account"
-description: "Reference for the craftybase account command."
+title: "stocksmith account"
+description: "Reference for the stocksmith account command."
 ---
 
-## craftybase account
+## stocksmith account
 
 Show account information
 
@@ -12,7 +12,7 @@ Show account information
 Display account details including name, currency, time zone, and plan.
 
 ```
-craftybase account [flags]
+stocksmith account [flags]
 ```
 
 ### Options
@@ -24,7 +24,7 @@ craftybase account [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -34,5 +34,5 @@ craftybase account [flags]
 
 ### SEE ALSO
 
-* [craftybase](/reference/craftybase/)	 - Official CLI for the Craftybase Public API
+* [stocksmith](/reference/stocksmith/)	 - Official CLI for the Stocksmith Public API
 

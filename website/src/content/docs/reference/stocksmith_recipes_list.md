@@ -1,15 +1,15 @@
 ---
-title: "craftybase recipes list"
-description: "Reference for the craftybase recipes list command."
+title: "stocksmith recipes list"
+description: "Reference for the stocksmith recipes list command."
 ---
 
-## craftybase recipes list
+## stocksmith recipes list
 
 List recipes
 
 ### Synopsis
 
-List recipes (bills of materials) from your Craftybase account.
+List recipes (bills of materials) from your Stocksmith account.
 
 A recipe is the formulation for a product or variation — the materials and
 quantities consumed per batch, with cost and COGS rollups. Filter by product,
@@ -17,7 +17,7 @@ variation, or change time. Use --all to fetch all pages, or --ndjson for
 streaming NDJSON output suitable for data pipelines.
 
 ```
-craftybase recipes list [flags]
+stocksmith recipes list [flags]
 ```
 
 ### Options
@@ -35,7 +35,7 @@ craftybase recipes list [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -45,5 +45,5 @@ craftybase recipes list [flags]
 
 ### SEE ALSO
 
-* [craftybase recipes](/reference/craftybase_recipes/)	 - Manage recipes
+* [stocksmith recipes](/reference/stocksmith_recipes/)	 - Manage recipes
 

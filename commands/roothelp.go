@@ -8,19 +8,21 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/brand"
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
-// rootLogo is the flat-teal CRAFTYBASE wordmark (48x3). Raw segments are joined
-// around literal backticks so backslashes stay literal.
+// rootLogo is the flat-teal STOCKSMITH wordmark. Raw segments are joined around
+// the one literal backtick (in the lowercase "m") so the backslashes stay literal.
 //
 // NOTE: this art literally spells the product name, so — unlike the other
 // brand-bearing strings, which route through internal/brand — it cannot be
-// centralized. Regenerate it as part of the planned Stocksmith rebrand.
-const rootLogo = ` __   __        ___ ___      __        __   ___
-/  ` + "`" + ` |__)  /\  |__   |  \ / |__)  /\  /__` + "`" + ` |__
-\__, |  \ /~~\ |     |   |  |__) /~~\ .__/ |___ `
+// centralized. Regenerate it if the product is ever rebranded again.
+const rootLogo = `      _             _                  _ _   _
+  ___| |_ ___   ___| | _____ _ __ ___ (_) |_| |__
+ / __| __/ _ \ / __| |/ / __| '_ ` + "`" + ` _ \| | __| '_ \
+ \__ \ || (_) | (__|   <\__ \ | | | | | | |_| | | |
+ |___/\__\___/ \___|_|\_\___/_| |_| |_|_|\__|_| |_|`
 
 const (
 	tagline    = "The command-line interface for " + brand.ProductName
@@ -104,7 +106,7 @@ func renderRootHelp(root *cobra.Command, w io.Writer, opts renderOpts) {
 	fmt.Fprintln(w)
 	if opts.width <= 0 || opts.width >= logoWidth() {
 		for _, line := range strings.Split(rootLogo, "\n") {
-			fmt.Fprintln(w, st.Fg(output.TealBright, line))
+			fmt.Fprintln(w, st.Fg(output.AmberBright, line))
 		}
 	} else {
 		fmt.Fprintln(w, st.Bold(brand.ProductName))
@@ -121,20 +123,20 @@ func renderRootHelp(root *cobra.Command, w io.Writer, opts renderOpts) {
 	fmt.Fprintln(w, st.Bold("Flags:"))
 	flagCol := columnWidth(flagRows)
 	for _, f := range flagRows {
-		fmt.Fprintln(w, "  "+pad(st.Fg(output.TealBright, f.name), f.name, flagCol)+st.Fg(output.Gray, f.desc))
+		fmt.Fprintln(w, "  "+pad(st.Fg(output.AmberBright, f.name), f.name, flagCol)+st.Fg(output.Gray, f.desc))
 	}
 	fmt.Fprintln(w)
 
 	fmt.Fprintln(w, st.Bold("Environment Variables:"))
 	envCol := columnWidth(envVarRows)
 	for _, e := range envVarRows {
-		fmt.Fprintln(w, "  "+pad(st.Fg(output.TealBright, e.name), e.name, envCol)+st.Fg(output.Gray, e.desc))
+		fmt.Fprintln(w, "  "+pad(st.Fg(output.AmberBright, e.name), e.name, envCol)+st.Fg(output.Gray, e.desc))
 	}
 	fmt.Fprintln(w)
 
 	fmt.Fprintln(w, st.Fg(output.Gray, "try: ")+st.Fg(output.Terracotta, st.Bold(tryExample)))
 	fmt.Fprintln(w)
-	fmt.Fprintln(w, st.Fg(output.Gray, "Learn more at ")+st.Underline(st.Fg(output.TealBright, docsURL)))
+	fmt.Fprintln(w, st.Fg(output.Gray, "Learn more at ")+st.Underline(st.Fg(output.AmberBright, docsURL)))
 }
 
 // pad appends spaces after colored so that the underlying plain text reaches
@@ -170,8 +172,8 @@ func renderCommandRow(st output.Styler, root *cobra.Command, r cmdRow) string {
 	add := func(p, c string) { plain.WriteString(p); colored.WriteString(c) }
 
 	add("$ ", st.Fg(output.GrayDim, "$ "))
-	add(brand.BinaryName+" ", st.Fg(output.TealBright, brand.BinaryName+" "))
-	add(r.name, st.Fg(output.TealBright, r.name))
+	add(brand.BinaryName+" ", st.Fg(output.AmberBright, brand.BinaryName+" "))
+	add(r.name, st.Fg(output.AmberBright, r.name))
 	if r.args != "" {
 		add(" "+r.args, st.Fg(output.GrayDim, " "+r.args))
 	}
@@ -181,7 +183,7 @@ func renderCommandRow(st output.Styler, root *cobra.Command, r cmdRow) string {
 			sep = " | "
 		}
 		add(sep, st.Fg(output.GrayDim, sep))
-		add(s, st.Fg(output.TealLight, s))
+		add(s, st.Fg(output.AmberLight, s))
 	}
 
 	n := descCol - utf8.RuneCountInString(plain.String())

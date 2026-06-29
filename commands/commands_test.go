@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/craftybase/craftybase-cli/commands"
+	"github.com/craftybase/stocksmith-cli/commands"
 )
 
 func materialListFixture() []byte {

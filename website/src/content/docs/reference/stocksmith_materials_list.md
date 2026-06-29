@@ -1,14 +1,21 @@
 ---
-title: "craftybase components list"
-description: "Reference for the craftybase components list command."
+title: "stocksmith materials list"
+description: "Reference for the stocksmith materials list command."
 ---
 
-## craftybase components list
+## stocksmith materials list
 
-List components
+List materials
+
+### Synopsis
+
+List materials from your Stocksmith account.
+
+Filter by SKU, name, category, or state. Use --all to fetch all pages,
+or --ndjson for streaming NDJSON output suitable for data pipelines.
 
 ```
-craftybase components list [flags]
+stocksmith materials list [flags]
 ```
 
 ### Options
@@ -27,7 +34,7 @@ craftybase components list [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -37,5 +44,5 @@ craftybase components list [flags]
 
 ### SEE ALSO
 
-* [craftybase components](/reference/craftybase_components/)	 - Manage components
+* [stocksmith materials](/reference/stocksmith_materials/)	 - Manage materials
 

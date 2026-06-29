@@ -9,20 +9,19 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/craftybase/craftybase-cli/internal/output"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/output"
 )
 
 var apiCmd = &cobra.Command{
 	Use:   "api <METHOD> <path>",
 	Short: "Make authenticated API requests",
-	Long: `Make authenticated requests to the Craftybase API.
-
-The path must be the full API path starting with /api/v1/.
-
-Examples:
-  craftybase api GET /api/v1/account
-  craftybase api GET /api/v1/materials
-  craftybase api GET "/api/v1/materials?sku=WAX-001"`,
+	Long: "Make authenticated requests to the " + brand.ProductName + " API.\n\n" +
+		"The path must be the full API path starting with /api/v1/.\n\n" +
+		"Examples:\n" +
+		"  " + brand.BinaryName + " api GET /api/v1/account\n" +
+		"  " + brand.BinaryName + " api GET /api/v1/materials\n" +
+		"  " + brand.BinaryName + ` api GET "/api/v1/materials?sku=WAX-001"`,
 	Args: cobra.ExactArgs(2),
 	RunE: runAPI,
 }

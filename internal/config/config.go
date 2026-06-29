@@ -7,7 +7,7 @@ import (
 
 	"github.com/pelletier/go-toml/v2"
 
-	"github.com/craftybase/craftybase-cli/internal/brand"
+	"github.com/craftybase/stocksmith-cli/internal/brand"
 )
 
 type Profile struct {

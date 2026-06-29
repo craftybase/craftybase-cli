@@ -8,19 +8,19 @@ By default, list/show commands print an aligned, colored table.
 ## JSON
 
 ```sh
-craftybase materials list --json
+stocksmith materials list --json
 ```
 
 Prints the full API envelope (pretty-printed). Pipe into `jq`:
 
 ```sh
-craftybase materials list --json | jq '.materials[] | {id, name}'
+stocksmith materials list --json | jq '.materials[] | {id, name}'
 ```
 
 ## NDJSON (streaming, auto-paginated)
 
 ```sh
-craftybase materials list --ndjson
+stocksmith materials list --ndjson
 ```
 
 Emits one JSON object per line across all pages — ideal for pipelines. `--json` and `--ndjson` are mutually exclusive.

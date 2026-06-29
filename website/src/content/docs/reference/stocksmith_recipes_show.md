@@ -1,14 +1,14 @@
 ---
-title: "craftybase products show"
-description: "Reference for the craftybase products show command."
+title: "stocksmith recipes show"
+description: "Reference for the stocksmith recipes show command."
 ---
 
-## craftybase products show
+## stocksmith recipes show
 
-Show a single product
+Show a single recipe
 
 ```
-craftybase products show <id> [flags]
+stocksmith recipes show <id> [flags]
 ```
 
 ### Options
@@ -20,7 +20,7 @@ craftybase products show <id> [flags]
 ### Options inherited from parent commands
 
 ```
-      --api-url string   API base URL (default: https://api.craftybase.com)
+      --api-url string   API base URL (default: https://api.stocksmith.io)
       --json             Output raw API envelope (pretty-printed JSON)
       --ndjson           Output auto-paginated NDJSON stream
       --no-color         Disable ANSI color output
@@ -30,5 +30,5 @@ craftybase products show <id> [flags]
 
 ### SEE ALSO
 
-* [craftybase products](/reference/craftybase_products/)	 - Manage products
+* [stocksmith recipes](/reference/stocksmith_recipes/)	 - Manage recipes
 
